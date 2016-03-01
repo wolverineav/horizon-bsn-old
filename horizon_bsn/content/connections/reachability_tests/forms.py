@@ -20,9 +20,12 @@ from django.forms import ValidationError  # noqa
 from django.utils.translation import ugettext_lazy as _
 from horizon import exceptions
 from horizon import forms
+from horizon.forms import fields
 from horizon import messages
 from horizon_bsn.api import neutron
 import logging
+from openstack_dashboard.api import keystone
+from openstack_dashboard.api import neutron as osneutron
 import re
 
 LOG = logging.getLogger(__name__)
@@ -43,53 +46,53 @@ EXPECTATION_CHOICES = [('default', _('--- Select Result ---')),
 
 
 class CreateReachabilityTest(forms.SelfHandlingForm):
-    def __init__(self, request, *args, **kwargs):
-        super(CreateReachabilityTest, self).__init__(request, *args, **kwargs)
-        self.fields['src_tenant_id'].initial = request.user.project_id
-
     name = forms.CharField(max_length="64",
                            label=_("Name"),
                            required=True)
 
-    src_tenant_id = forms.CharField(
-        max_length="64",
-        label=_("Sepecify source tenant"),
-        required=True,
-        initial="",
-        widget=forms.TextInput(
-            attrs={'class': 'switched',
-                   'data-connection_source-tenant':
-                       _('Specify source tenant')}))
+    src_tenant_name = forms.ChoiceField(
+        label="Source Tenant",
+        help_text="Select a source tenant name.")
 
-    src_segment_id = forms.CharField(
-        max_length="64",
-        label=_("Sepecify source segment"),
-        required=True,
-        initial="",
-        widget=forms.TextInput(
-            attrs={'class': 'switched',
-                   'data-connection_source-segment':
-                       _('Specify source segment')}))
+    src_segment_name = forms.ChoiceField(
+        label="Source Segment",
+        help_text="Select a source segment name.")
 
-    src_ip = forms.CharField(
-        max_length="16",
-        label=_("Use ip address as source"),
-        required=True,
-        initial="0.0.0.0",
-        widget=forms.TextInput(
-            attrs={'class': 'switched',
-                   'data-connection_source_type-ip':
-                       _('Specify source IP address')}))
+    def __init__(self, request, *args, **kwargs):
+        super(CreateReachabilityTest, self).__init__(request, *args, **kwargs)
+        self.fields['src_tenant_name'].choices = self\
+            .populate_tenant_choices(request)
+        self.fields['src_segment_name'].choices = self\
+            .populate_segment_choices(request)
 
-    dst_ip = forms.CharField(
-        max_length="16",
-        label=_("Use ip address as destination"),
+    def populate_tenant_choices(self, request):
+        tenants, has_more = keystone.tenant_list(
+            request, admin=request.user.is_superuser)
+        tenant_list = [(tenant.name, tenant.name) for tenant in tenants]
+        if tenant_list:
+            tenant_list.insert(0, ("", _("Select a tenant")))
+        else:
+            tenant_list.insert(0, ("", _("No tenants available.")))
+        return sorted(tenant_list)
+
+    def populate_segment_choices(self, request):
+        networks = osneutron.network_list(request)
+        segment_list = [(network.name, network.name) for network in networks]
+        if segment_list:
+            segment_list.insert(0, ("", _("Select a Segment")))
+        else:
+            segment_list.insert(0, ("", _("No segments available")))
+        return segment_list
+
+    src_ip = fields.IPField(
+        label = _("Source IP Address"),
         required=True,
-        initial="0.0.0.0",
-        widget=forms.TextInput(
-            attrs={'class': 'switched',
-                   'data-connection_destination_type-ip':
-                       _('Specify destination IP address')}))
+        initial="0.0.0.0")
+
+    dst_ip = fields.IPField(
+        label = _("Destination IP Address"),
+        required=True,
+        initial="0.0.0.0")
 
     expected_result = forms.ChoiceField(
         label=_('Expected Connection Results'),
@@ -127,59 +130,8 @@ class CreateReachabilityTest(forms.SelfHandlingForm):
                               _("Failed to create reachability test"))
 
 
-class UpdateForm(forms.SelfHandlingForm):
-    def __init__(self, request, *args, **kwargs):
-        super(UpdateForm, self).__init__(request, *args, **kwargs)
-        self.fields['src_tenant_id'].initial = request.user.project_id
-
+class UpdateForm(CreateReachabilityTest):
     id = forms.CharField(max_length="36", widget=forms.HiddenInput())
-
-    name = forms.CharField(max_length="255", label=_("Name"), required=True)
-
-    src_tenant_id = forms.CharField(
-        max_length="255", label=_("Sepecify source tenant"),
-        required=True, initial="",
-        widget=forms.TextInput(attrs={'class': 'switched',
-                                      'data-connection_source-tenant':
-                                          _('Specify source tenant')}))
-
-    src_segment_id = forms.CharField(
-        max_length="255",
-        label=_("Sepecify source segment"),
-        required=True,
-        initial="",
-        widget=forms.TextInput(
-            attrs={'class': 'switched',
-                   'data-connection_source-segment':
-                       _('Specify source segment')}))
-
-    src_ip = forms.CharField(
-        max_length="255",
-        label=_("Use ip address as source"),
-        required=True,
-        initial="0.0.0.0",
-        widget=forms.TextInput(
-            attrs={'class': 'switched',
-                   'data-connection_source_type-ip':
-                       _('Specify source IP address')}))
-
-    dst_ip = forms.CharField(
-        max_length="255",
-        label=_("Use ip address as destination"),
-        required=True,
-        initial="0.0.0.0",
-        widget=forms.TextInput(
-            attrs={'class': 'switched',
-                   'data-connection_destination_type-ip':
-                       _('Specify destination IP address')}))
-
-    expected_result = forms.ChoiceField(
-        label=_('Expected Connection Results'),
-        required=True,
-        choices=EXPECTATION_CHOICES,
-        widget=forms.Select(
-            attrs={'class': 'switchable',
-                   'data-slug': 'expected_result'}))
 
     def clean(self):
         cleaned_data = super(UpdateForm, self).clean()
@@ -211,49 +163,50 @@ class UpdateForm(forms.SelfHandlingForm):
 
 
 class RunQuickTestForm(forms.SelfHandlingForm):
+
+    src_tenant_name = forms.ChoiceField(
+        label="Source Tenant",
+        help_text="Select a source tenant name.")
+
+    src_segment_name = forms.ChoiceField(
+        label="Source Segment",
+        help_text="Select a source segment name.")
+
     def __init__(self, request, *args, **kwargs):
         super(RunQuickTestForm, self).__init__(request, *args, **kwargs)
-        self.fields['src_tenant_id'].initial = request.user.project_id
+        self.fields['src_tenant_name'].choices = self\
+            .populate_tenant_choices(request)
+        self.fields['src_segment_name'].choices = self\
+            .populate_segment_choices(request)
 
-    src_tenant_id = forms.CharField(
-        max_length="255",
-        label=_("Sepecify source tenant"),
-        required=True,
-        initial="",
-        widget=forms.TextInput(
-            attrs={'class': 'switched',
-                   'data-connection_source-tenant':
-                       _('Specify source tenant')}))
+    def populate_tenant_choices(self, request):
+        tenants, has_more = keystone.tenant_list(
+            request, admin=request.user.is_superuser)
+        tenant_list = [(tenant.name, tenant.name) for tenant in tenants]
+        if tenant_list:
+            tenant_list.insert(0, ("", _("Select a tenant")))
+        else:
+            tenant_list.insert(0, ("", _("No tenants available.")))
+        return sorted(tenant_list)
 
-    src_segment_id = forms.CharField(
-        max_length="255",
-        label=_("Sepecify source segment"),
-        required=True,
-        initial="",
-        widget=forms.TextInput(
-            attrs={'class': 'switched',
-                   'data-connection_source-segment':
-                       _('Specify source segment')}))
+    def populate_segment_choices(self, request):
+        networks = osneutron.network_list(request)
+        segment_list = [(network.name, network.name) for network in networks]
+        if segment_list:
+            segment_list.insert(0, ("", _("Select a Segment")))
+        else:
+            segment_list.insert(0, ("", _("No segments available")))
+        return segment_list
 
-    src_ip = forms.CharField(
-        max_length="255",
-        label=_("Use ip address as source"),
+    src_ip = fields.IPField(
+        label = _("Source IP Address"),
         required=True,
-        initial="0.0.0.0",
-        widget=forms.TextInput(
-            attrs={'class': 'switched',
-                   'data-connection_source_type-ip':
-                       _('Specify source IP address')}))
+        initial="0.0.0.0")
 
-    dst_ip = forms.CharField(
-        max_length="255",
-        label=_("Use ip address as destination"),
+    dst_ip = fields.IPField(
+        label = _("Destination IP Address"),
         required=True,
-        initial="0.0.0.0",
-        widget=forms.TextInput(
-            attrs={'class': 'switched',
-                   'data-connection_destination_type-ip':
-                       _('Specify destination IP address')}))
+        initial="0.0.0.0")
 
     expected_result = forms.ChoiceField(
         label=_('Expected Connection Results'),

@@ -30,6 +30,7 @@ from horizon_bsn.content.connections.reachability_tests.tables \
 import json
 
 from openstack_dashboard.api import heat
+from openstack_dashboard.api import keystone
 
 LOG = logging.getLogger(__name__)
 
