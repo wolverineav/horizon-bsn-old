@@ -87,12 +87,12 @@ class CreateReachabilityTest(forms.SelfHandlingForm):
         return segment_list
 
     src_ip = fields.IPField(
-        label = _("Source IP Address"),
+        label=_("Source IP Address"),
         required=True,
         initial="0.0.0.0")
 
     dst_ip = fields.IPField(
-        label = _("Destination IP Address"),
+        label=_("Destination IP Address"),
         required=True,
         initial="0.0.0.0")
 
@@ -201,12 +201,12 @@ class RunQuickTestForm(forms.SelfHandlingForm):
         return segment_list
 
     src_ip = fields.IPField(
-        label = _("Source IP Address"),
+        label=_("Source IP Address"),
         required=True,
         initial="0.0.0.0")
 
     dst_ip = fields.IPField(
-        label = _("Destination IP Address"),
+        label=_("Destination IP Address"),
         required=True,
         initial="0.0.0.0")
 
