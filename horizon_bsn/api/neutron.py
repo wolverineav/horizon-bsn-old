@@ -30,7 +30,6 @@ def reachabilitytest_list(request, **params):
         .list_reachabilitytests(**params)
     object_list = [NeutronAPIDictWrapper(obj)
                    for obj in reachabilitytests['reachabilitytests']]
-
     return object_list, False
 
 
