@@ -97,7 +97,7 @@ class NetworkTemplateTable(tables.DataTable):
 
 
 class NetworkTemplateAdminTable(tables.DataTable):
-    id = tables.Column("id", verbose_name=_("Template ID"))
+    id = tables.Column("id", verbose_name=_("Template ID"), hidden=True)
     name = tables.Column(
         "name", verbose_name=_("Name"),
         link="horizon:admin:connections:network_template_admin:detail")
