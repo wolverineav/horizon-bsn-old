@@ -30,7 +30,7 @@ def reachabilitytest_list(request, **params):
         .list_reachabilitytests(**params)
     object_list = [NeutronAPIDictWrapper(obj)
                    for obj in reachabilitytests['reachabilitytests']]
-    return object_list, False
+    return object_list
 
 
 def convert_to_cli(result_detail):
@@ -119,7 +119,7 @@ def networktemplate_list(request, **params):
         .list_networktemplates(**params)
     object_list = [NeutronAPIDictWrapper(obj)
                    for obj in networktemplates['networktemplates']]
-    return object_list, False
+    return object_list
 
 
 def networktemplate_get(request, networktemplate_id):
@@ -194,7 +194,7 @@ def networktemplateassignment_list(request, **params):
     assignlist = \
         [NeutronAPIDictWrapper(obj)
          for obj in networktemplateassignments['networktemplateassignments']]
-    return assignlist, False
+    return assignlist
 
 
 def networktemplateassignment_get(request, networktemplateassignment_id):
@@ -270,7 +270,7 @@ def reachabilityquicktest_list(request, **params):
         .list_reachabilityquicktests(**params)
     return \
         [NeutronAPIDictWrapper(obj)
-         for obj in reachabilityquicktests['reachabilityquicktests']], False
+         for obj in reachabilityquicktests['reachabilityquicktests']]
 
 
 def reachabilityquicktest_get(request, reachabilityquicktest_id):

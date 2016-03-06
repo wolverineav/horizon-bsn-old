@@ -44,7 +44,7 @@ class SelectTemplateForm(forms.SelfHandlingForm):
 
     def __init__(self, request, *args, **kwargs):
         super(SelectTemplateForm, self).__init__(request, *args, **kwargs)
-        templates, has_more = neutron.networktemplate_list(request, **{})
+        templates = neutron.networktemplate_list(request, **{})
         field_templates = []
         if templates:
             field_templates.append(

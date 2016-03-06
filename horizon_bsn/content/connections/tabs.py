@@ -44,17 +44,9 @@ class NetworkTemplateAdminTab(tabs.TableTab):
         return (self.request.path_info.startswith('/admin/') and
                 super(NetworkTemplateAdminTab, self).allowed(request))
 
-    def has_more_data(self, table):
-        return self._has_more
-
     def get_networktemplate_admin_data(self):
         try:
-            marker = self.request.GET.get(
-                NetworkTemplateAdminTable._meta.pagination_param, None)
-            networktemplates, self._has_more = neutron.\
-                networktemplate_list(
-                    self.request,
-                    search_opts=({'marker': marker, 'paginate': True}))
+            networktemplates = neutron.networktemplate_list(self.request, **{})
             return networktemplates
         except Exception:
             return []
@@ -127,20 +119,23 @@ class NetworkTemplateTab(tabs.TableTab):
                 and super(NetworkTemplateTab, self).allowed(request))
 
     def get_networktemplate_data(self):
-        topology = get_stack_topology(self.request)
-        if not topology.get('assign'):
+        try:
+            topology = get_stack_topology(self.request)
+            if not topology.get('assign'):
+                return []
+            tabledata = {
+                'template_name': topology['template'].name,
+                'heat_stack_name': topology['stack'].stack_name,
+                'description': topology['stack'].description,
+                'status': topology['stack'].stack_status_reason,
+                'resources': mark_safe('<br>'.join([
+                    ('%s (%s)' % (r.resource_name,
+                                  r.resource_type)).replace(' ', '&nbsp;')
+                    for r in topology['stack_resources']]))
+            }
+            return [tabledata]
+        except Exception:
             return []
-        tabledata = {
-            'template_name': topology['template'].name,
-            'heat_stack_name': topology['stack'].stack_name,
-            'description': topology['stack'].description,
-            'status': topology['stack'].stack_status_reason,
-            'resources': mark_safe('<br>'.join([
-                ('%s (%s)' % (r.resource_name,
-                              r.resource_type)).replace(' ', '&nbsp;')
-                for r in topology['stack_resources']]))
-        }
-        return [tabledata]
 
 
 class ReachabilityTestsTab(tabs.TableTab):
@@ -149,19 +144,12 @@ class ReachabilityTestsTab(tabs.TableTab):
     slug = "reachabilitytest_tab"
     template_name = "horizon/common/_detail_table.html"
 
-    def has_more_data(self, table):
-        return self._has_more
-
     def get_reachabilitytests_data(self):
         try:
-            marker = self.request.GET.get(
-                ReachabilityTestsTable._meta.pagination_param, None)
-            reachabilitytests, self._has_more = neutron.reachabilitytest_list(
-                self.request,
-                search_opts=({'marker': marker, 'paginate': True}))
+            reachabilitytests = neutron.reachabilitytest_list(self.request,
+                                                              **{})
             return reachabilitytests
         except Exception:
-            self._has_more = False
             return []
 
 
