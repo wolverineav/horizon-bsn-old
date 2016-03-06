@@ -1,14 +1,12 @@
 CHANGES
 =======
 
-* basic reachability test get working
-* use core horizon's neutronclient
-* NeutronAPIDictFckinWrapper
-* try it with reachability test panel
-* display reachability tests only
-* gamble3
-* gamble2
-* gamble
-* init plugin base
-* initial stub commit
+0.0.1
+-----
+
+* hide network template ID from the table
+* remove tenant_id from network template object
+* fix pep8
+* add initial horizon code
+* add initial horizon code
 * Initial commit
