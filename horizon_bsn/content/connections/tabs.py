@@ -26,6 +26,7 @@ from horizon_bsn.content.connections.network_template.tables \
     import NetworkTemplateTable
 from horizon_bsn.content.connections.reachability_tests.tables \
     import ReachabilityTestsTable
+from horizon_bsn.content.connections.routerrules import tabs as rr_tabs
 
 import json
 
@@ -158,4 +159,6 @@ class ConnectionsTabs(tabs.TabGroup):
     # TODO(kevinbenton): re-enabled top talkers once implemented
     # tabs = (NetworkTemplateTab, ReachabilityTestsTab, TopTalkersTab)
     sticky = True
-    tabs = (ReachabilityTestsTab, NetworkTemplateTab, NetworkTemplateAdminTab)
+    #tabs = (ReachabilityTestsTab, NetworkTemplateTab, NetworkTemplateAdminTab)
+    tabs = (ReachabilityTestsTab, NetworkTemplateTab, NetworkTemplateAdminTab,
+            rr_tabs.RulesGridTab, rr_tabs.RouterRulesTab)
