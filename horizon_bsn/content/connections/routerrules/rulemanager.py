@@ -14,6 +14,7 @@
 
 import logging
 
+from horizon import messages
 from openstack_dashboard.api import neutron as api
 
 LOG = logging.getLogger(__name__)
@@ -26,6 +27,42 @@ class RuleObject(dict):
         self.priority = rule['priority']
         # Flatten into csv for display
         self.nexthops = ','.join(rule['nexthops'])
+
+
+def is_rule_in_set(rule, rule_list):
+    """Check if the given rule is present in the rule_list
+
+    :param rule_list: list of existing rules in dictionary format
+    :param rule: new rule to be added
+    :return boolean:
+    """
+    for old_rule in rule_list:
+        if rule['source'] == old_rule['source']\
+                and rule['destination'] == old_rule['destination']\
+                and rule['action'] == old_rule['action']\
+                and rule['priority'] == old_rule['priority']:
+            return True
+    return False
+
+
+def get_rule_diff(old_ruleset, new_ruleset):
+    added_rules = [rule for rule in new_ruleset
+                   if not is_rule_in_set(rule, old_ruleset)]
+    deleted_rules = [rule for rule in old_ruleset
+                     if not is_rule_in_set(rule, new_ruleset)]
+    return deleted_rules, added_rules
+
+
+def popup_messages(request, old_ruleset, new_ruleset):
+    deleted_rules, added_rules = get_rule_diff(old_ruleset, new_ruleset)
+    if deleted_rules:
+        del_msg = _('Removed router rule(s): %s') % deleted_rules
+        LOG.debug(del_msg)
+        messages.warning(request, del_msg)
+    if added_rules:
+        add_msg = _('Added router rule(s): %s') % added_rules
+        LOG.debug(add_msg)
+        messages.success(request, add_msg)
 
 
 def routerrule_list(request, **params):
@@ -44,7 +81,6 @@ def routerrule_list(request, **params):
 
 def remove_rules(request, priority, **kwargs):
     LOG.debug("remove_rules(): param=%s", kwargs)
-    # router_id = request.META['router_id']
     router_id = kwargs['router_id']
     supported, currentrules = routerrule_list(request,
                                               **{'router_id': router_id})
@@ -66,6 +102,7 @@ def remove_rules(request, priority, **kwargs):
     new = api.router_update(request, router_id, **body)
     if 'router' in request.META:
         request.META['router'] = new
+    popup_messages(request, currentrules, new.router_rules)
     return new
 
 
@@ -80,6 +117,7 @@ def add_rule(request, router_id, newrule, **kwargs):
     new = api.router_update(request, router_id, **body)
     if 'router' in request.META:
         request.META['router'] = new
+    popup_messages(request, currentrules, new.router_rules)
     return new
 
 
