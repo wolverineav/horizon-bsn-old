@@ -38,7 +38,6 @@ class AddRouterRuleView(forms.ModalFormView):
     def get_success_url(self):
         return reverse(self.url)
 
-
     @memoized.memoized_method
     def get_object(self):
         try:

@@ -159,6 +159,5 @@ class ConnectionsTabs(tabs.TabGroup):
     # TODO(kevinbenton): re-enabled top talkers once implemented
     # tabs = (NetworkTemplateTab, ReachabilityTestsTab, TopTalkersTab)
     sticky = True
-    #tabs = (ReachabilityTestsTab, NetworkTemplateTab, NetworkTemplateAdminTab)
     tabs = (ReachabilityTestsTab, NetworkTemplateTab, NetworkTemplateAdminTab,
             rr_tabs.RulesGridTab, rr_tabs.RouterRulesTab)
