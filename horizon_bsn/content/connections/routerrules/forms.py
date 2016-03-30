@@ -46,7 +46,8 @@ class RuleCIDRField(forms.IPField):
 
 class AddRouterRule(forms.SelfHandlingForm):
     priority = forms.IntegerField(label=_("Priority"), initial=-1,
-                                  min_value=-1, max_value=3000, required=False)
+                                  min_value=-1, max_value=3000, required=False,
+                                  widget=forms.HiddenInput())
     source = RuleCIDRField(label=_("Source CIDR"),
                            widget=forms.TextInput())
     destination = RuleCIDRField(label=_("Destination CIDR"),
