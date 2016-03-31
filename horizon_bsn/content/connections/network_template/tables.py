@@ -105,8 +105,8 @@ class StacksUpdateRow(tables.Row):
                 if assignment:
                     neutron.networktemplateassignment_delete(
                         request, assignment.id)
-                msg = _('Removed template association for stack_id %s') %\
-                      stack_id
+                msg = _('Removed template association for stack_id %s') % \
+                    stack_id
                 LOG.debug(msg)
                 messages.success(request, msg)
             except Exception as e:

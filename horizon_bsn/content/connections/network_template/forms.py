@@ -94,9 +94,10 @@ class RemoveTemplateForm(forms.SelfHandlingForm):
             # we only want the one that matches the network template
             stack = heat.stack_get(request, assign.stack_id)
             if not stack:
-                msg = _('Stack instance %s could not be found. Deleting the '
-                        'network template association %s.') % (assign.stack_id,
-                                                               assign.id)
+                msg = _('Stack instance %(stack_id)s could not be found. '
+                        'Deleting the network template association '
+                        '%(assign_id)s.') % {'stack_id': assign.stack_id,
+                                             'assign_id': assign.id}
                 LOG.error(msg)
                 messages.error(request, msg)
             else:
@@ -105,9 +106,11 @@ class RemoveTemplateForm(forms.SelfHandlingForm):
                 stack = heat.stack_get(request, assign.stack_id)
                 if stack.stack_status not in \
                         ['DELETE_IN_PROGRESS', 'DELETE_COMPLETED']:
-                    msg = _('Stack instance %s could not be deleted. '
-                            'Reason: %s. Skipping network template removal.')\
-                          % (assign.stack_id, stack.stack_status_reason)
+                    msg = _('Stack instance %(stack_name)s could not be '
+                            'deleted. Reason: %(status_reason)s. Skipping '
+                            'network template removal.') % \
+                        {'stack_name': stack.stack_name,
+                         'status_reason': stack.stack_status_reason}
                     LOG.error(msg)
                     messages.error(request, msg)
                     return False
