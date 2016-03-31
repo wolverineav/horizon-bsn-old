@@ -10,16 +10,20 @@
 # implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 from django.core.urlresolvers import reverse
 from django.forms import ValidationError  # noqa
 from django.utils.translation import ugettext_lazy as _
 
 from horizon import exceptions
 from horizon import forms
+from horizon import messages
 from horizon_bsn.api import neutron
 
+import logging
+
 from openstack_dashboard.api import heat
+
+LOG = logging.getLogger(__name__)
 
 
 def findDefault(template_list, key):
@@ -87,17 +91,33 @@ class RemoveTemplateForm(forms.SelfHandlingForm):
         try:
             assign = neutron.networktemplateassignment_get(
                 request, request.user.tenant_id)
-            hc = heat.heatclient(request)
             # we only want the one that matches the network template
-            stacks = \
-                [s for s in hc.stacks.list(tenant_id=request.user.tenant_id)
-                 if s.id == assign.stack_id]
-            if stacks:
-                hc.stacks.delete(assign.stack_id)
-            # delete the network template assignment too
-            neutron.networktemplateassignment_delete(request, assign.id)
+            stack = heat.stack_get(request, assign.stack_id)
+            if not stack:
+                msg = _('Stack instance %s could not be found. Deleting the '
+                        'network template association %s.') % (assign.stack_id,
+                                                               assign.id)
+                LOG.error(msg)
+                messages.error(request, msg)
+            else:
+                # stack found, delete it
+                heat.stack_delete(request, assign.stack_id)
+                stack = heat.stack_get(request, assign.stack_id)
+                if stack.stack_status not in \
+                        ['DELETE_IN_PROGRESS', 'DELETE_COMPLETED']:
+                    msg = _('Stack instance %s could not be deleted. '
+                            'Reason: %s. Skipping network template removal.')\
+                          % (assign.stack_id, stack.stack_status_reason)
+                    LOG.error(msg)
+                    messages.error(request, msg)
+                    return False
+
+                msg = _('Stack %s delete in progress..') % assign.stack_id
+                LOG.info(msg)
+                messages.warning(request, msg)
             return True
-        except Exception:
+        except Exception as e:
+            messages.error(request, e)
             return False
 
 
