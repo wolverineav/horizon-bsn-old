@@ -125,10 +125,14 @@ class NetworkTemplateTab(tabs.TableTab):
             if not topology.get('assign'):
                 return []
             tabledata = {
+                'template_id': topology['template'].id,
                 'template_name': topology['template'].name,
+                'stack_id': topology['stack'].id,
                 'heat_stack_name': topology['stack'].stack_name,
                 'description': topology['stack'].description,
-                'status': topology['stack'].stack_status_reason,
+                'status': topology['stack'].status,
+                'stack_status': topology['stack'].stack_status,
+                'stack_status_reason': topology['stack'].stack_status_reason,
                 'resources': mark_safe('<br>'.join([
                     ('%s (%s)' % (r.resource_name,
                                   r.resource_type)).replace(' ', '&nbsp;')
