@@ -52,7 +52,7 @@ class ReachabilityTestFilterAction(tables.FilterAction):
         """Naive case-insentitive search."""
         q = filter_string.lower()
         return [reachabilitytest for reachabilitytest in reachabilitytests
-                if q in reachabilitytests.name.lower()]
+                if q in reachabilitytest.name.lower()]
 
 
 class RunTest(tables.BatchAction):
