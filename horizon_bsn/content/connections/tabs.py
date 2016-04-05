@@ -26,6 +26,7 @@ from horizon_bsn.content.connections.network_template.tables \
     import NetworkTemplateTable
 from horizon_bsn.content.connections.reachability_tests.tables \
     import ReachabilityTestsTable
+from horizon_bsn.content.connections.routerrules import tabs as rr_tabs
 
 import json
 
@@ -124,10 +125,14 @@ class NetworkTemplateTab(tabs.TableTab):
             if not topology.get('assign'):
                 return []
             tabledata = {
+                'template_id': topology['template'].id,
                 'template_name': topology['template'].name,
+                'stack_id': topology['stack'].id,
                 'heat_stack_name': topology['stack'].stack_name,
                 'description': topology['stack'].description,
-                'status': topology['stack'].stack_status_reason,
+                'status': topology['stack'].status,
+                'stack_status': topology['stack'].stack_status,
+                'stack_status_reason': topology['stack'].stack_status_reason,
                 'resources': mark_safe('<br>'.join([
                     ('%s (%s)' % (r.resource_name,
                                   r.resource_type)).replace(' ', '&nbsp;')
@@ -158,4 +163,5 @@ class ConnectionsTabs(tabs.TabGroup):
     # TODO(kevinbenton): re-enabled top talkers once implemented
     # tabs = (NetworkTemplateTab, ReachabilityTestsTab, TopTalkersTab)
     sticky = True
-    tabs = (ReachabilityTestsTab, NetworkTemplateTab, NetworkTemplateAdminTab)
+    tabs = (ReachabilityTestsTab, NetworkTemplateTab, NetworkTemplateAdminTab,
+            rr_tabs.RulesGridTab, rr_tabs.RouterRulesTab)

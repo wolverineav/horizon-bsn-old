@@ -19,6 +19,8 @@ from horizon_bsn.content.connections.network_template \
     import urls as network_template_urls
 from horizon_bsn.content.connections.reachability_tests \
     import urls as reachability_tests_urls
+from horizon_bsn.content.connections.routerrules \
+    import urls as routerrules_urls
 from horizon_bsn.content.connections import views
 
 import os
@@ -33,6 +35,8 @@ LIB_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__)),
 urlpatterns = patterns(
     '',
     url(r'^$', views.IndexView.as_view(), name='index'),
+    url(r'routerrules/',
+        include(routerrules_urls, namespace='routerrules')),
     url(r'reachability_tests/',
         include(reachability_tests_urls, namespace='reachability_tests')),
     url(r'network_template/',
