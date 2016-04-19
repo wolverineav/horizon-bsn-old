@@ -32,9 +32,9 @@ $(function(){
         window.setTimeout("delayClick()",50);
 });
 function delayClick(){
-        //debugger
-	$($(".close")[0]).prop("href","/project/connections")
-	$($(".close")[0]).attr("data-dismiss", "")
+    //debugger
+    $($(".close")[0]).prop("href","{% url 'horizon:project:connections:index' %}")
+    $($(".close")[0]).attr("data-dismiss", "")
 }
 </script>
 {% endblock %}
