@@ -27,7 +27,10 @@ from horizon_bsn.content.connections.network_template \
 class ApplyTemplateView(forms.ModalFormView):
     form_class = project_forms.ApplyTemplateForm
     template_name = 'project/connections/network_template/apply_template.html'
-    success_url = reverse_lazy('horizon:project:connections:index')
+    url = 'horizon:project:connections:index'
+
+    def get_success_url(self):
+        return reverse(self.url)
 
     def get_context_data(self, **kwargs):
         context = super(ApplyTemplateView, self).get_context_data(**kwargs)
@@ -38,6 +41,10 @@ class ApplyTemplateView(forms.ModalFormView):
 class PopulateTemplateView(forms.ModalFormView):
     form_class = project_forms.ApplyTemplateForm
     template_name = 'project/connections/network_template/temp_page.html'
+    cancel_url = 'horizon:project:connections:index'
+
+    def get_cancel_url(self):
+        return reverse(self.cancel_url)
 
     def get_context_data(self, **kwargs):
         context = super(PopulateTemplateView, self).get_context_data(**kwargs)
@@ -50,6 +57,10 @@ class SelectTemplateView(forms.ModalFormView):
     template_name = 'project/connections/network_template/select_template.html'
     success_url = (
         'horizon:project:connections:network_template:populate_template')
+    cancel_url = 'horizon:project:connections:index'
+
+    def get_cancel_url(self):
+        return reverse(self.cancel_url)
 
     def get_success_url(self):
         return reverse(
