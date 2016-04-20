@@ -55,6 +55,8 @@ class AddRouterRule(forms.SelfHandlingForm):
     action = forms.ChoiceField(label=_("Action"))
     nexthops = forms.MultiIPField(label=_("Optional: Next Hop "
                                           "Addresses (comma delimited)"),
+                                  help_text=_("Next Hop field is ignored for "
+                                              "Deny action"),
                                   widget=forms.TextInput(), required=False)
     router_id = forms.CharField(label=_("Router ID"),
                                 widget=forms.TextInput(attrs={'readonly':
@@ -83,6 +85,8 @@ class AddRouterRule(forms.SelfHandlingForm):
                 data['source'] = 'any'
             if data['destination'] == '0.0.0.0/0':
                 data['destination'] = 'any'
+            if data['action'] == 'deny':
+                data['nexthops'] = ''
             rule = {'priority': data['priority'],
                     'action': data['action'],
                     'source': data['source'],

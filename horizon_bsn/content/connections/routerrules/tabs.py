@@ -28,7 +28,7 @@ from horizon_bsn.content.connections.routerrules import tables as rrtbl
 
 class RouterRulesTab(tabs.TableTab):
     table_classes = (rrtbl.RouterRulesTable,)
-    name = _("Router Rules")
+    name = _("Router Policies")
     slug = "routerrules"
     template_name = "horizon/common/_detail_table.html"
 
@@ -58,7 +58,7 @@ class RouterRulesTab(tabs.TableTab):
 
 
 class RulesGridTab(tabs.Tab):
-    name = _("Router Rules Grid")
+    name = _("Router Policies Grid")
     slug = "rulesgrid"
     template_name = ("project/connections/routerrules/grid.html")
 
