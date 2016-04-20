@@ -21,7 +21,7 @@
 
 {% block modal-footer %}
       <input class="btn btn-primary pull-right" type="submit" value="{% trans "Next" %}" />
-      <a href="./" class="btn secondary">{% trans "Cancel" %}</a>
+      <a href="{% url 'horizon:project:connections:index' %}" class="btn secondary">{% trans "Cancel" %}</a>
 
 <script type='text/javascript'>
 /**
