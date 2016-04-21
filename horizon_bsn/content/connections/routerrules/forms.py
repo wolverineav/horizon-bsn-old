@@ -104,3 +104,25 @@ class AddRouterRule(forms.SelfHandlingForm):
             messages.error(request, msg)
             redirect = reverse(self.failure_url)
             exceptions.handle(request, msg, redirect=redirect)
+
+
+class ResetRouterRule(forms.SelfHandlingForm):
+    router_id = forms.CharField(label=_("Router ID"),
+                                widget=forms.TextInput(attrs={'readonly':
+                                                              'readonly'}))
+    failure_url = 'horizon:project:connections:index'
+
+    def handle(self, request, data, **kwargs):
+        try:
+            data['reset_rules'] = True
+            rulemanager.remove_rules(request, None, **data)
+            msg = _('Router rule reset performed successfully.')
+            LOG.debug(msg)
+            messages.success(request, msg)
+            return True
+        except Exception as e:
+            msg = _('Failed to reset router rule %s') % e
+            LOG.info(msg)
+            messages.error(request, msg)
+            redirect = reverse(self.failure_url)
+            exceptions.handle(request, msg, redirect=redirect)

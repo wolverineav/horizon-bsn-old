@@ -10,12 +10,12 @@
      <th class='table_header' colspan='{{ rulesmatrix|length|add:1 }}'>
        <h3 class='table_title'>{% trans "Router Rule Grid" %}</h3>
        <div class="table_actions clearfix">
-         <form action="./" method="POST"
+         <form action="./routerrules/resetrouterrule" method="POST"
           style='display: inline; background-color: transparent; float: none; margin-left: 0;'>
           {% csrf_token %}
           <input type="hidden" name="router_id" value="{{ router.id }}"/>
           <button class="btn btn-sm btn-danger"
-                  type="submit" href="#" name="action" value="routerrules__resetrules"><span class="fa fa-close"> {% trans "Reset to Default" %}</button>
+                  type="submit" href="#" name="action"><span class="fa fa-close"> {% trans "Reset to Default" %}</button>
           </form>
        </div>
      </th>
