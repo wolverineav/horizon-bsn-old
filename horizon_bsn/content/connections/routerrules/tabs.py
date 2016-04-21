@@ -48,14 +48,6 @@ class RouterRulesTab(tabs.TableTab):
         routerrules = sorted(routerrules, key=lambda k: k['priority'])
         return [rulemanager.RuleObject(r) for r in routerrules]
 
-    def post(self, request, *args, **kwargs):
-        kwargs['router_id'] = request.META['router_id']
-        if request.POST['action'] == 'routerrules__resetrules':
-            kwargs['reset_rules'] = True
-            rulemanager.remove_rules(request, None, **kwargs)
-            self.tab_group.kwargs['router'] = \
-                api.neutron.router_get(request, request.META['router_id'])
-
 
 class RulesGridTab(tabs.Tab):
     name = _("Router Policies Grid")
