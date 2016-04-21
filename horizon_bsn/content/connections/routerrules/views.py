@@ -62,3 +62,9 @@ class AddRouterRuleView(forms.ModalFormView):
         self.request.META['router'] = router
         return {"router_id": router.id,
                 "router_name": router.name_or_id}
+
+
+class ResetRouterRuleView(AddRouterRuleView):
+    form_class = rrforms.ResetRouterRule
+    template_name = None
+    page_title = _("Reset Router Rule")
