@@ -23,11 +23,22 @@ LOG = logging.getLogger(__name__)
 
 class CreateUpdateNetworkTemplate(forms.SelfHandlingForm):
     id = forms.CharField(widget=forms.HiddenInput(), required=False)
-    name = forms.CharField(max_length=255, label=_("Name"), required=True)
+    name = forms.CharField(max_length=255, label=_("Name"),
+                           help_text=_("Spaces will be trimmed or converted "
+                                       "to _ based on their location."),
+                           required=True)
     body = forms.CharField(
         widget=forms.Textarea(attrs={'rows': 20}),
         max_length=None, label=_("Template Body"), required=True)
     template_name = "horizon/common/_detail_table.html"
+
+    def clean(self):
+        cleaned_data = super(CreateUpdateNetworkTemplate, self).clean()
+        if cleaned_data['name']:
+            cleaned_data['name'] = (cleaned_data['name']
+                                    .strip()
+                                    .replace(" ", "_"))
+        return cleaned_data
 
     def handle(self, request, data):
         if data['id'] == '':
