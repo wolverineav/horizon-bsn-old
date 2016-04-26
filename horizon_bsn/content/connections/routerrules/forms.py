@@ -68,6 +68,21 @@ class AddRouterRule(forms.SelfHandlingForm):
         self.fields['action'].choices = [('permit', _('Permit')),
                                          ('deny', _('Deny'))]
 
+    def clean(self):
+        cleaned_data = super(AddRouterRule, self).clean()
+        if 'priority' not in cleaned_data:
+            cleaned_data['priority'] = -1
+        if 'nexthops' not in cleaned_data:
+            cleaned_data['nexthops'] = ''
+        if cleaned_data['source'] and cleaned_data['source'] == '0.0.0.0/0':
+            cleaned_data['source'] = 'any'
+        if (cleaned_data['destination']
+            and cleaned_data['destination'] == '0.0.0.0/0'):
+            cleaned_data['destination'] = 'any'
+        if cleaned_data['action'] and cleaned_data['action'] == 'deny':
+                cleaned_data['nexthops'] = ''
+        return cleaned_data
+
     def handle(self, request, data, **kwargs):
         try:
             if 'rule_to_delete' in request.POST:
@@ -77,16 +92,6 @@ class AddRouterRule(forms.SelfHandlingForm):
         except Exception:
             exceptions.handle(request, _('Unable to delete router rule.'))
         try:
-            if 'priority' not in data:
-                data['priority'] = -1
-            if 'nexthops' not in data:
-                data['nexthops'] = ''
-            if data['source'] == '0.0.0.0/0':
-                data['source'] = 'any'
-            if data['destination'] == '0.0.0.0/0':
-                data['destination'] = 'any'
-            if data['action'] == 'deny':
-                data['nexthops'] = ''
             rule = {'priority': data['priority'],
                     'action': data['action'],
                     'source': data['source'],
