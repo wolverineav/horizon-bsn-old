@@ -33,17 +33,21 @@ LOG = logging.getLogger(__name__)
 
 NEW_LINES = re.compile(r"\r|\n")
 EXPECTATION_CHOICES = [('default', _('--- Select Result ---')),
-                       ('reached destination', _('reached destination')),
                        ('dropped by route', _('dropped by route')),
                        ('dropped by policy', _('dropped by policy')),
+                       ('not permitted by security groups',
+                        _('not permitted by security groups')),
                        ('dropped due to private segment',
                         _('dropped due to private segment')),
+                       ('dropped due to loop', _('dropped due to loop')),
                        ('packet in', _('packet in')),
                        ('forwarded', _('forwarded')),
                        ('dropped', _('dropped')),
-                       ('multiple sources', _('multiple sources')),
+                       ('unspecified source', _('unspecified source')),
                        ('unsupported', _('unsupported')),
-                       ('invalid input', _('invalid input'))]
+                       ('invalid input', _('invalid input')),
+                       ('inconsistent status', ('inconsistent status')),
+                       ('no traffic detected', _('no traffic detected'))]
 
 
 class CreateReachabilityTest(forms.SelfHandlingForm):
