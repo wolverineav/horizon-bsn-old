@@ -77,7 +77,7 @@ class AddRouterRule(forms.SelfHandlingForm):
         if cleaned_data['source'] and cleaned_data['source'] == '0.0.0.0/0':
             cleaned_data['source'] = 'any'
         if (cleaned_data['destination']
-            and cleaned_data['destination'] == '0.0.0.0/0'):
+                and cleaned_data['destination'] == '0.0.0.0/0'):
             cleaned_data['destination'] = 'any'
         if cleaned_data['action'] and cleaned_data['action'] == 'deny':
                 cleaned_data['nexthops'] = ''
