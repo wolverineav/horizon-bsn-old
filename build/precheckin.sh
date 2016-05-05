@@ -10,4 +10,4 @@ if [ ${setup_cfg_modified} -ne 1 ];
 else
   echo "All is Well."; fi
 # check the new_version > old_version
-git log -m -1 ${GIT_COMMIT} -p setup.cfg | grep version | build/python is_version_bumped.py
+git log -m -1 ${GIT_COMMIT} -p setup.cfg | grep version | python build/is_version_bumped.py
