@@ -11,4 +11,4 @@ else
   echo "setup.cfg updated"; fi
 # check the new_version > old_version
 echo 'checking if version bump is correct'
-git log -m -1 ${GIT_COMMIT} -p setup.cfg | grep version | python build/is_version_bumped.py
+git log -m -1 ${GIT_COMMIT} --pretty="format:" -p setup.cfg | grep version | python build/is_version_bumped.py
