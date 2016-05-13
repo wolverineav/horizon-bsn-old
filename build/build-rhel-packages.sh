@@ -18,6 +18,7 @@ docker.io run -v $BUILDDIR:/rpmbuild $DOCKER_IMAGE /rpmbuild/build-rhel-packages
 OUTDIR=$(readlink -m "pkg/$BUILD_OS/$CURR_VERSION")
 rm -rf "$OUTDIR" && mkdir -p "$OUTDIR"
 mv $BUILDDIR/SRPMS/*.rpm "$OUTDIR"
+mv $BUILDDIR/RPMS/noarch/*.rpm "$OUTDIR"
 git log > "$OUTDIR/gitlog.txt"
 touch "$OUTDIR/build-$CURR_VERSION"
 ln -snf $(basename $OUTDIR) $OUTDIR/../latest
