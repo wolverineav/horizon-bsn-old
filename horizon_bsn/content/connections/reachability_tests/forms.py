@@ -22,6 +22,7 @@ from horizon import exceptions
 from horizon import forms
 from horizon.forms import fields
 from horizon import messages
+
 from horizon_bsn.api import neutron
 import logging
 from openstack_dashboard.api import keystone
@@ -58,7 +59,7 @@ class CreateReachabilityTest(forms.SelfHandlingForm):
 
     src_tenant_name = forms.ChoiceField(
         label="Source Tenant",
-        help_text="Select a source tenant name.")
+        help_text="Test reachability for current tenant only.")
 
     src_segment_name = forms.ChoiceField(
         label="Source Segment",
@@ -68,21 +69,23 @@ class CreateReachabilityTest(forms.SelfHandlingForm):
         super(CreateReachabilityTest, self).__init__(request, *args, **kwargs)
         self.fields['src_tenant_name'].choices = self\
             .populate_tenant_choices(request)
+        self.fields['src_tenant_name'].widget.attrs['readonly'] = True
         self.fields['src_segment_name'].choices = self\
             .populate_segment_choices(request)
 
     def populate_tenant_choices(self, request):
-        tenants, has_more = keystone.tenant_list(
-            request, admin=request.user.is_superuser)
-        tenant_list = [(tenant.name, tenant.name) for tenant in tenants]
-        if tenant_list:
-            tenant_list.insert(0, ("", _("Select a tenant")))
+        tenant = keystone.tenant_get(request, request.user.project_id)
+        tenant_list = []
+        if tenant:
+            tenant_list = [(tenant.name, tenant.name)]
         else:
-            tenant_list.insert(0, ("", _("No tenants available.")))
-        return sorted(tenant_list)
+            tenant_list.insert(0, ("", _("No tenants available")))
+        return tenant_list
 
     def populate_segment_choices(self, request):
-        networks = osneutron.network_list(request)
+        networks = osneutron.network_list(request,
+                                          tenant_id=request.user.project_id,
+                                          shared=False)
         segment_list = [(network.name, network.name) for network in networks]
         if segment_list:
             segment_list.insert(0, ("", _("Select a Segment")))
