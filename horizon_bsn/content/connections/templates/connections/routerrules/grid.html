@@ -8,10 +8,10 @@
 
    <tr class='table_caption'>
      <th class='table_header' colspan='{{ rulesmatrix|length|add:1 }}'>
-       <h3 class='table_title'>{% trans "Router Rule Grid" %}</h3>
+       <h3 class='table_title'>{% trans "Router Policies Grid" %}</h3>
        <div class="table_actions clearfix">
          <form action="./routerrules/resetrouterrule" method="POST"
-          style='display: inline; background-color: transparent; float: none; margin-left: 0;'>
+          style='display: inline; background-color: transparent; float: none; margin-left: 0; width: auto;'>
           {% csrf_token %}
           <input type="hidden" name="router_id" value="{{ router.id }}"/>
           <button class="btn btn-sm btn-danger"
