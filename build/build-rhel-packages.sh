@@ -1,5 +1,5 @@
 #!/bin/bash -eux
-docker.io pull wolverineav/horizon-bsn-builder
+docker.io pull -a wolverineav/horizon-bsn-builder
 
 DOCKER_IMAGE=wolverineav/horizon-bsn-builder:centos7
 BUILD_OS=centos7-x86_64
