@@ -5,7 +5,7 @@
 %global lib_dir %{buildroot}%{python2_sitelib}/%{pypi_name}/plugins/bigswitch
 
 Name:           python-%{rpm_name}
-Version:        0.0.12
+Version:        0.0.13
 Release:        1%{?dist}
 Summary:        Big Switch Networks horizon plugin for OpenStack
 License:        ASL 2.0
@@ -72,6 +72,8 @@ done
 %postun
 
 %changelog
+* Thu May 12 2016 Aditya Vaja <wolverine.av@gmail.com> - 0.0.13
+- minor fix
 * Thu May 12 2016 Aditya Vaja <wolverine.av@gmail.com> - 0.0.12
 - add build infra to automate upload and rpm packaging
 * Thu Apr 21 2016 Aditya Vaja <wolverine.av@gmail.com> - 2015.3.2
