@@ -189,17 +189,18 @@ class RunQuickTestForm(forms.SelfHandlingForm):
             .populate_segment_choices(request)
 
     def populate_tenant_choices(self, request):
-        tenants, has_more = keystone.tenant_list(
-            request, admin=request.user.is_superuser)
-        tenant_list = [(tenant.name, tenant.name) for tenant in tenants]
-        if tenant_list:
-            tenant_list.insert(0, ("", _("Select a tenant")))
+        tenant = keystone.tenant_get(request, request.user.project_id)
+        tenant_list = []
+        if tenant:
+            tenant_list = [(tenant.name, tenant.name)]
         else:
-            tenant_list.insert(0, ("", _("No tenants available.")))
-        return sorted(tenant_list)
+            tenant_list.insert(0, ("", _("No tenants available")))
+        return tenant_list
 
     def populate_segment_choices(self, request):
-        networks = osneutron.network_list(request)
+        networks = osneutron.network_list(request,
+                                          tenant_id=request.user.project_id,
+                                          shared=False)
         segment_list = [(network.name, network.name) for network in networks]
         if segment_list:
             segment_list.insert(0, ("", _("Select a Segment")))

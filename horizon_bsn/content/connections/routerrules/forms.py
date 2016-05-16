@@ -59,8 +59,10 @@ class AddRouterRule(forms.SelfHandlingForm):
                                               "Deny action"),
                                   widget=forms.TextInput(), required=False)
     router_id = forms.CharField(label=_("Router ID"),
-                                widget=forms.TextInput(attrs={'readonly':
-                                                              'readonly'}))
+                                widget=forms.HiddenInput())
+    router_name = forms.CharField(label=_("Router Name"),
+                                  widget=forms.TextInput(attrs={'readonly':
+                                                                'readonly'}))
     failure_url = 'horizon:project:connections:index'
 
     def __init__(self, request, *args, **kwargs):
@@ -90,7 +92,7 @@ class AddRouterRule(forms.SelfHandlingForm):
                                          request.POST['rule_to_delete'],
                                          router_id=data['router_id'])
         except Exception:
-            exceptions.handle(request, _('Unable to delete router rule.'))
+            exceptions.handle(request, _('Unable to delete router policy.'))
         try:
             rule = {'priority': data['priority'],
                     'action': data['action'],
@@ -99,7 +101,7 @@ class AddRouterRule(forms.SelfHandlingForm):
                     'nexthops': data['nexthops'].split(',')}
             rulemanager.add_rule(request, router_id=data['router_id'],
                                  newrule=rule)
-            msg = _('Router rule action performed successfully.')
+            msg = _('Router policy action performed successfully.')
             LOG.debug(msg)
             messages.success(request, msg)
             return True
@@ -121,12 +123,12 @@ class ResetRouterRule(forms.SelfHandlingForm):
         try:
             data['reset_rules'] = True
             rulemanager.remove_rules(request, None, **data)
-            msg = _('Router rule reset performed successfully.')
+            msg = _('Router policy reset performed successfully.')
             LOG.debug(msg)
             messages.success(request, msg)
             return True
         except Exception as e:
-            msg = _('Failed to reset router rule %s') % e
+            msg = _('Failed to reset router policy %s') % e
             LOG.info(msg)
             messages.error(request, msg)
             redirect = reverse(self.failure_url)
