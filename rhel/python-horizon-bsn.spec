@@ -5,11 +5,7 @@
 %global lib_dir %{buildroot}%{python2_sitelib}/%{pypi_name}/plugins/bigswitch
 
 Name:           python-%{rpm_name}
-<<<<<<< HEAD
-Version:        2015.2.4
-=======
-Version:        0.0.16
->>>>>>> 0d0af78010161a3aafd8a8f53b69cef00c39a307
+Version:        2015.2.5
 Release:        1%{?dist}
 Summary:        Big Switch Networks horizon plugin for OpenStack
 License:        ASL 2.0
@@ -76,6 +72,11 @@ done
 %postun
 
 %changelog
+* Tue May 17 2016 Aditya Vaja <wolverine.av@gmail.com> - 2015.2.5
+- BVS-5473 replace occurances of rule with policy
+- BVS-5785 fix tenant choices in quick test
+- tweak build script for upload to pypi
+- copy RPMS along with SRPMS
 * Fri May 13 2016 Aditya Vaja <wolverine.av@gmail.com> - 2015.2.4
 - align reset button
 - testpath policy
