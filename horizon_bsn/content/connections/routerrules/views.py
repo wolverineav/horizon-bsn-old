@@ -33,7 +33,7 @@ class AddRouterRuleView(forms.ModalFormView):
     form_class = rrforms.AddRouterRule
     template_name = 'project/connections/routerrules/create.html'
     url = 'horizon:project:connections:index'
-    page_title = _("Add Router Rule")
+    page_title = _("Add Router Policy")
 
     def get_success_url(self):
         return reverse(self.url)
@@ -67,4 +67,4 @@ class AddRouterRuleView(forms.ModalFormView):
 class ResetRouterRuleView(AddRouterRuleView):
     form_class = rrforms.ResetRouterRule
     template_name = None
-    page_title = _("Reset Router Rule")
+    page_title = _("Reset Router Policies")
