@@ -26,7 +26,7 @@ LOG = logging.getLogger(__name__)
 
 class AddRouterRule(policy.PolicyTargetMixin, tables.LinkAction):
     name = "create"
-    verbose_name = _("Add Router Rule")
+    verbose_name = _("Add Router Policy")
     url = "horizon:project:connections:routerrules:addrouterrule"
     classes = ("ajax-modal",)
     icon = "plus"
@@ -40,16 +40,16 @@ class RemoveRouterRule(policy.PolicyTargetMixin, tables.DeleteAction):
     @staticmethod
     def action_present(count):
         return ungettext_lazy(
-            u"Delete Router Rule",
-            u"Delete Router Rules",
+            u"Delete Router Policy",
+            u"Delete Router Policies",
             count
         )
 
     @staticmethod
     def action_past(count):
         return ungettext_lazy(
-            u"Deleted Router Rule",
-            u"Deleted Router Rules",
+            u"Deleted Router Policy",
+            u"Deleted Router Policies",
             count
         )
 
@@ -78,6 +78,6 @@ class RouterRulesTable(tables.DataTable):
 
     class Meta(object):
         name = "routerrules"
-        verbose_name = _("Router Rules")
+        verbose_name = _("Router Policies")
         table_actions = (AddRouterRule, RemoveRouterRule)
         row_actions = (RemoveRouterRule, )

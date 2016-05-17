@@ -17,8 +17,9 @@
 <div class="right">
     <h3>{% trans "Description:" %}</h3>
     <p>
-    {% trans "Routing rules to apply to router. Rules are matched by most specific source first and then by most specific destination." %}<br/>
-    {% trans "The next hop addresses can be used to override the router used by the client." %}
+    {% trans "Routing policies to apply to router. Policies are matched by most specific source first and then by most specific destination." %}<br/>
+    {% trans "The next hop addresses can be used to override the router used by the client." %}<br/>
+    {% trans "Next hop addresses are ignored for Deny action policies." %}
     </p>
 </div>
 {% endblock %}

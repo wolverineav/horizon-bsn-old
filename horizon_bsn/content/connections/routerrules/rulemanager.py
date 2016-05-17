@@ -56,11 +56,11 @@ def get_rule_diff(old_ruleset, new_ruleset):
 def popup_messages(request, old_ruleset, new_ruleset):
     deleted_rules, added_rules = get_rule_diff(old_ruleset, new_ruleset)
     if deleted_rules:
-        del_msg = _('Removed router rule(s): %s') % deleted_rules
+        del_msg = _('Removed router policies: %s') % deleted_rules
         LOG.debug(del_msg)
         messages.warning(request, del_msg)
     if added_rules:
-        add_msg = _('Added router rule(s): %s') % added_rules
+        add_msg = _('Added router policies: %s') % added_rules
         LOG.debug(add_msg)
         messages.success(request, add_msg)
 
@@ -85,7 +85,7 @@ def remove_rules(request, priority, **kwargs):
     supported, currentrules = routerrule_list(request,
                                               **{'router_id': router_id})
     if not supported:
-        LOG.error("router rules not supported by router %s" % router_id)
+        LOG.error("router policies not supported by router %s" % router_id)
         return
     newrules = []
     if 'reset_rules' in kwargs:
@@ -111,7 +111,7 @@ def add_rule(request, router_id, newrule, **kwargs):
     kwargs['router_id'] = router_id
     supported, currentrules = routerrule_list(request, **kwargs)
     if not supported:
-        LOG.error("router rules not supported by router %s" % router_id)
+        LOG.error("router policies not supported by router %s" % router_id)
         return
     body['router_rules'] = format_for_api([newrule] + currentrules)
     new = api.router_update(request, router_id, **body)
