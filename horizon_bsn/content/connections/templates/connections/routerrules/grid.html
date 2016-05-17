@@ -71,7 +71,9 @@
            <input type="hidden" name="action" value="{{ dest.inverse_rule.action }}">
 
            {% if dest.rule_to_delete %}
-               <div class="center-block"><input type="hidden" name="rule_to_delete" value="{{ dest.rule_to_delete.priority }}"/></div>
+               <div class="center-block">
+                   <input type="hidden" name="rule_to_delete" value="{{ dest.rule_to_delete.priority }}"/>
+               </div>
            {% endif %}
            {% if dest.reachable == 'none' %}
               <div class="center-block">
@@ -87,25 +89,40 @@
               {% endif %}
            </div>
            {% else %}
-                <div class="center-block"><a type="button" class="btn btn-default btn-xs" href="#modal_{{ dest.subnetid|add:row.source.subnetid }}" data-toggle="modal"><span class="fa fa-exclamation-circle"></span> Conflict</a></div>
-               <div class="modal hide" id="modal_{{ dest.subnetid|add:row.source.subnetid }}">
-                 <div class="modal-header">
-                   <a class="close" data-dismiss="modal">&times;</a>
-                   <h3>{% trans "Rule Conflict" %}</h3>
-                 </div>
-                 <div class="modal-body">
-                   <p>{% blocktrans %}A more specific rule affects a portion of this traffic so a rule cannot be automatically generated to control the behavior of the entire source/destination combination.{% endblocktrans %}</p>
-                   <hr>
-                   <h4>{% trans "Conflicting Rule" %}</h4>
-                   <b>{% trans "Priority:" %}</b> {{ dest.conflicting_rule.priority }}<br>
-                   <b>{% trans "Source:" %}</b> {{ dest.conflicting_rule.source }}<br>
-                   <b>{% trans "Destination:" %}</b> {{ dest.conflicting_rule.destination }}<br>
-                   <b>{% trans "Action:" %}</b> {{ dest.conflicting_rule.action }}<br>
-                 </div>
-                 <div class="modal-footer">
-                   <a href="#" class="btn" data-dismiss="modal">{% trans "Close" %}</a>
-                 </div>
+           <div class="center-block">
+               <a type="button" class="btn btn-default btn-xs"
+                  data-target="#modal_{{ dest.subnetid|add:row.source.subnetid }}" data-toggle="modal">
+                   <span class="fa fa-exclamation-circle"></span> Conflict
+               </a>
+           </div>
+           <div class="modal fade" id="modal_{{ dest.subnetid|add:row.source.subnetid }}" role="dialog">
+               <div class="modal-dialog">
+                   <div class="modal-content">
+                       <div class="modal-header">
+                           <a class="close" data-dismiss="modal">&times;</a>
+                           <h3 class="modal-title">{% trans "Policy Conflict" %}</h3>
+                       </div>
+                       <div class="modal-body">
+                           <p>
+                               {% blocktrans %}A more specific policy affects a portion of this traffic so a policy
+                               cannot be automatically generated to control the behavior of the entire
+                               source/destination combination.{% endblocktrans %}
+                           </p>
+                           <hr>
+                           <h4>{% trans "Conflicting Policy" %}</h4>
+                           <b>{% trans "Priority:" %}</b> {{ dest.conflicting_rule.priority }}<br>
+                           <b>{% trans "Source:" %}</b> {{ dest.conflicting_rule.source }}<br>
+                           <b>{% trans "Destination:" %}</b> {{ dest.conflicting_rule.destination }}<br>
+                           <b>{% trans "Action:" %}</b> {{ dest.conflicting_rule.action }}<br>
+                       </div>
+                       <div class="modal-footer">
+                           <a href="{% url 'horizon:project:connections:index' %}" class="btn" data-dismiss="modal">
+                               {% trans "Close" %}
+                           </a>
+                       </div>
+                   </div>
                </div>
+           </div>
            {% endif %}
            </form>
            </td>

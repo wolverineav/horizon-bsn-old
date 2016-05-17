@@ -62,7 +62,8 @@ class AddRouterRule(forms.SelfHandlingForm):
                                 widget=forms.HiddenInput())
     router_name = forms.CharField(label=_("Router Name"),
                                   widget=forms.TextInput(attrs={'readonly':
-                                                                'readonly'}))
+                                                                'readonly'}),
+                                  required=False)
     failure_url = 'horizon:project:connections:index'
 
     def __init__(self, request, *args, **kwargs):
@@ -76,13 +77,13 @@ class AddRouterRule(forms.SelfHandlingForm):
             cleaned_data['priority'] = -1
         if 'nexthops' not in cleaned_data:
             cleaned_data['nexthops'] = ''
-        if cleaned_data['source'] and cleaned_data['source'] == '0.0.0.0/0':
+        if 'source' in cleaned_data and cleaned_data['source'] == '0.0.0.0/0':
             cleaned_data['source'] = 'any'
-        if (cleaned_data['destination']
+        if ('destination' in cleaned_data
                 and cleaned_data['destination'] == '0.0.0.0/0'):
             cleaned_data['destination'] = 'any'
-        if cleaned_data['action'] and cleaned_data['action'] == 'deny':
-                cleaned_data['nexthops'] = ''
+        if 'action' in cleaned_data and cleaned_data['action'] == 'deny':
+            cleaned_data['nexthops'] = ''
         return cleaned_data
 
     def handle(self, request, data, **kwargs):
