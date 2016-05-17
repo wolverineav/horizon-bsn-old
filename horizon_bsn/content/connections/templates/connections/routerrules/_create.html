@@ -6,7 +6,7 @@
 {% block form_action %}{% url 'horizon:project:connections:routerrules:addrouterrule' %}
 {% endblock %}
 
-{% block modal-header %}{% trans "Add Router Rule" %}{% endblock %}
+{% block modal-header %}{% trans "Add Router Policy" %}{% endblock %}
 
 {% block modal-body %}
 <div class="left">
@@ -25,6 +25,6 @@
 {% endblock %}
 
 {% block modal-footer %}
-  <input class="btn btn-primary pull-right" type="submit" value="{% trans "Add rule" %}" />
+  <input class="btn btn-primary pull-right" type="submit" value="{% trans "Add Policy" %}" />
   <a href="{% url 'horizon:project:connections:index' %}" class="btn btn-default secondary cancel close">{% trans "Cancel" %}</a>
 {% endblock %}
