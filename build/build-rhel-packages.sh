@@ -15,7 +15,7 @@ cp build/build-rhel-packages-inner.sh $BUILDDIR/build-rhel-packages-inner.sh
 docker.io run -v $BUILDDIR:/rpmbuild $DOCKER_IMAGE /rpmbuild/build-rhel-packages-inner.sh
 
 # Copy built RPMs to pkg/
-OUTDIR=$(readlink -m "pkg/$BUILD_OS/$CURR_VERSION")
+OUTDIR=$(readlink -m "pkg/$BUILD_OS/$GIT_BRANCH/$CURR_VERSION")
 rm -rf "$OUTDIR" && mkdir -p "$OUTDIR"
 mv $BUILDDIR/SRPMS/*.rpm "$OUTDIR"
 mv $BUILDDIR/RPMS/noarch/*.rpm "$OUTDIR"
