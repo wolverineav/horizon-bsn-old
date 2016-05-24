@@ -241,7 +241,7 @@ class RunQuickTestForm(forms.SelfHandlingForm):
         return cleaned_data
 
     def handle(self, request, data):
-        data['name'] = "quicktest"
+        data['name'] = "quicktest_" + str(request.user.project_id)
         try:
             reachabilityquicktest = neutron \
                 .reachabilityquicktest_get(request, request.user.project_id)
