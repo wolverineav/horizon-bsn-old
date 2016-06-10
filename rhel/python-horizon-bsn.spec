@@ -6,7 +6,6 @@
 
 Name:           python-%{rpm_name}
 Version:        2015.3.8
->>>>>>> cdb1734... update version and spec
 Release:        1%{?dist}
 Summary:        Big Switch Networks horizon plugin for OpenStack
 License:        ASL 2.0
