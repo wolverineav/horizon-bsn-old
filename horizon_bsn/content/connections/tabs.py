@@ -182,7 +182,6 @@ class ReachabilityTestsAdminTab(tabs.TableTab):
             return []
 
 
-
 class ConnectionsTabs(tabs.TabGroup):
     slug = "connections_tabs"
     # TODO(kevinbenton): re-enabled top talkers once implemented
