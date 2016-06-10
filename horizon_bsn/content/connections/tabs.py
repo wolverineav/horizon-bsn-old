@@ -149,6 +149,30 @@ class ReachabilityTestsTab(tabs.TableTab):
     slug = "reachabilitytest_tab"
     template_name = "horizon/common/_detail_table.html"
 
+    def allowed(self, request):
+        # don't show the regular tab to admins
+        return (not request.path_info.startswith('/admin/')
+                and super(ReachabilityTestsTab, self).allowed(request))
+
+    def get_reachabilitytests_data(self):
+        try:
+            reachabilitytests = neutron.reachabilitytest_list(
+                self.request, **{'tenant_id': self.request.user.project_id})
+            return reachabilitytests
+        except Exception:
+            return []
+
+
+class ReachabilityTestsAdminTab(tabs.TableTab):
+    table_classes = (ReachabilityTestsTable,)
+    name = _("Reachability Tests")
+    slug = "reachabilitytest_admin_tab"
+    template_name = "horizon/common/_detail_table.html"
+
+    def allowed(self, request):
+        return (self.request.path_info.startswith('/admin/') and
+                super(ReachabilityTestsAdminTab, self).allowed(request))
+
     def get_reachabilitytests_data(self):
         try:
             reachabilitytests = neutron.reachabilitytest_list(self.request,
@@ -158,10 +182,12 @@ class ReachabilityTestsTab(tabs.TableTab):
             return []
 
 
+
 class ConnectionsTabs(tabs.TabGroup):
     slug = "connections_tabs"
     # TODO(kevinbenton): re-enabled top talkers once implemented
     # tabs = (NetworkTemplateTab, ReachabilityTestsTab, TopTalkersTab)
     sticky = True
-    tabs = (ReachabilityTestsTab, NetworkTemplateTab, NetworkTemplateAdminTab,
+    tabs = (ReachabilityTestsTab, ReachabilityTestsAdminTab,
+            NetworkTemplateTab, NetworkTemplateAdminTab,
             rr_tabs.RulesGridTab, rr_tabs.RouterRulesTab)
