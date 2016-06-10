@@ -5,7 +5,7 @@
 %global lib_dir %{buildroot}%{python2_sitelib}/%{pypi_name}/plugins/bigswitch
 
 Name:           python-%{rpm_name}
-Version:        2015.1.1
+Version:        2015.1.2
 Release:        1%{?dist}
 Summary:        Big Switch Networks horizon plugin for OpenStack
 License:        ASL 2.0
@@ -72,5 +72,7 @@ done
 %postun
 
 %changelog
+* Fri Jun 10 2016 Aditya Vaja <wolverine.av@gmail.com> - 2015.1.2
+- BVS-6323 limit testpath visiblity to tenants
 * Tue Jun 07 2016 Aditya Vaja <wolverine.av@gmail.com> - 2015.1.1
 - Release 2015.1.1 package for kilo_v2
