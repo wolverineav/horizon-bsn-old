@@ -5,7 +5,7 @@
 %global lib_dir %{buildroot}%{python2_sitelib}/%{pypi_name}/plugins/bigswitch
 
 Name:           python-%{rpm_name}
-Version:        2015.3.7
+Version:        20153.36.1
 Release:        1%{?dist}
 Summary:        Big Switch Networks horizon plugin for OpenStack
 License:        ASL 2.0
@@ -72,6 +72,8 @@ done
 %postun
 
 %changelog
+* Thu Jun 23 2016 Aditya Vaja <wolverine.av@gmail.com> - 20153.36.1
+- BVS-6497: present a warning when policy change doesn't affect existing policy set
 * Tue May 24 2016 Aditya Vaja <wolverine.av@gmail.com> - 2015.3.7
 - ensure quick testpath names are unique
 * Tue May 17 2016 Aditya Vaja <wolverine.av@gmail.com> - 2015.3.6
