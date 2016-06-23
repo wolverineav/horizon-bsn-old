@@ -74,6 +74,8 @@ done
 %changelog
 * Thu Jun 23 2016 Aditya Vaja <wolverine.av@gmail.com> - 20153.36.1
 - BVS-6497: present a warning when policy change doesn't affect existing policy set
+* Fri Jun 10 2016 Aditya Vaja <wolverine.av@gmail.com> - 2015.3.8
+- BVS-6323 limit testpath visiblity to tenants
 * Tue May 24 2016 Aditya Vaja <wolverine.av@gmail.com> - 2015.3.7
 - ensure quick testpath names are unique
 * Tue May 17 2016 Aditya Vaja <wolverine.av@gmail.com> - 2015.3.6
