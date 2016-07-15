@@ -1,0 +1,62 @@
+<div ng-controller="TableController as ctrl">
+
+
+  <table hz-table st-table="displayedCollection" st-safe-src="ctrl.tests" class="table table-striped">
+    <thead>
+    <tr>
+      <th colspan="4"></th>
+      <th colspan="2"><input st-search="" class="form-control" placeholder="filter ..." type="text"/></th>
+      <th>
+        <button type="button" class="btn btn-default" ng-click="ctrl.createTest()">
+          <span class="fa fa-plus"></span>
+          <translate>Reachability Test</translate>
+        </button>
+      </th>
+      <th>
+        <button type="button" class="btn btn-default" ng-click="ctrl.createQuickTest()">
+          <span class="fa fa-plus"></span>
+          <translate>Quick Test</translate>
+        </button>
+      </th>
+    </tr>
+
+    <tr>
+      <th>Name</th>
+      <th>Source Tenant</th>
+      <th>Source Segment</th>
+      <th>Source IP</th>
+      <th>Destination IP</th>
+      <th>Last Run</th>
+      <th>Status</th>
+      <th>Actions</th>
+    </tr>
+
+    </thead>
+
+    <tbody>
+    <tr ng-repeat="test in displayedCollection">
+      <td>{$ test.name $}</td>
+      <td>{$ test.src_tenant_name $}</td>
+      <td>{$ test.src_segment_name $}</td>
+      <td>{$ test.src_ip $}</td>
+      <td>{$ test.dst_ip $}</td>
+      <td>{$ test.test_time $}</td>
+      <td>{$ test.test_result | uppercase $}</td>
+      <td>
+        <!-- Split button -->
+        <div class="btn-group">
+          <button type="button" class="btn btn-default">Action</button>
+          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span class="sr-only">Toggle Dropdown</span>
+          </button>
+          <div class="dropdown-menu">
+            <div class="dropdown-item" href="#">Run Test</div>
+            <div class="dropdown-item" href="#">Delete Test</div>
+          </div>
+        </div>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+</div>

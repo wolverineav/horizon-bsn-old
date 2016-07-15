@@ -64,8 +64,8 @@ def reachabilitytest_create(request, **params):
     :param request: request context
     :param tenant_id: (optional) tenant id of the reachability test created
     :param name: name of the reachability test
-    :param src_tenant_id: tenant id of the source ip
-    :param src_segment_id: segment id of the source ip
+    :param src_tenant_name: tenant name of the source ip
+    :param src_segment_name: segment name of the source ip
     :param src_ip: source ip of the reachability test
     :param dst_ip: destination ip of the reachability test
     :param expected_result: expected result of the reachability test

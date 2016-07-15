@@ -10,15 +10,13 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-from django.utils.translation import ugettext_lazy as _
-
-import horizon
+from horizon import views
 
 
-class Bsndashboard(horizon.Dashboard):
-    name = _("BSN Dashboard")
-    slug = "bsndashboard"
-    default_panel = 'reachabilitytests'  # Specify the slug of the dashboard's default panel.
+class IndexView(views.APIView):
+    # A very simple class-based view...
+    template_name = 'angular.html'
 
-
-horizon.register(Bsndashboard)
+    def get_data(self, request, context, *args, **kwargs):
+        # Add data to the context here...
+        return context

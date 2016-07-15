@@ -31,3 +31,18 @@ class ReachabilityTests(generic.View):
     def get(self, request):
         result = neutron.reachabilitytest_list(request)
         return {'items': [n.to_dict() for n in result]}
+
+    @rest_utils.ajax()
+    def post(self, request):
+        result = neutron.reachabilitytest_create(request, **request.DATA)
+        return result
+
+@urls.register
+class NetworkTemplate(generic.View):
+    """API for BSN Neutron Network Template"""
+    url_regex = r'neutron/networktemplate/$'
+
+    @rest_utils.ajax()
+    def get(self, request):
+        result = neutron.networktemplate_list(request)
+        return {'items': [n.to_dict() for n in result]}
