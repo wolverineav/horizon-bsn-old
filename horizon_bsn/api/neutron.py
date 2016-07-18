@@ -24,6 +24,15 @@ LOG = logging.getLogger(__name__)
 neutronclient = neutron.neutronclient
 
 
+class RouterStaticRoute(NeutronAPIDictWrapper):
+    """Wrapper for neutron routes extra route."""
+
+    def __init__(self, route):
+        super(RouterStaticRoute, self).__init__(route)
+        # Flatten into csv for display
+        self.nexthops = ','.join(route['nexthops'])
+
+
 def reachabilitytest_list(request, **params):
     LOG.debug("reachabilitytest_list(): params=%s", params)
     reachabilitytests = neutronclient(request)\

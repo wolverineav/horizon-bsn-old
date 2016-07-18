@@ -21,6 +21,7 @@ from horizon_bsn.content.connections.reachability_tests \
     import urls as reachability_tests_urls
 from horizon_bsn.content.connections.routerrules \
     import urls as routerrules_urls
+from horizon_bsn.content.connections.routes import urls as routes_urls
 from horizon_bsn.content.connections import views
 
 import os
@@ -37,6 +38,8 @@ urlpatterns = patterns(
     url(r'^$', views.IndexView.as_view(), name='index'),
     url(r'routerrules/',
         include(routerrules_urls, namespace='routerrules')),
+    url(r'routes/',
+        include(routes_urls, namespace='routes')),
     url(r'reachability_tests/',
         include(reachability_tests_urls, namespace='reachability_tests')),
     url(r'network_template/',

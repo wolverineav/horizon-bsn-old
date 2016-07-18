@@ -27,6 +27,7 @@ from horizon_bsn.content.connections.network_template.tables \
 from horizon_bsn.content.connections.reachability_tests.tables \
     import ReachabilityTestsTable
 from horizon_bsn.content.connections.routerrules import tabs as rr_tabs
+from horizon_bsn.content.connections.routes import tabs as routes_tabs
 
 import json
 
@@ -189,4 +190,5 @@ class ConnectionsTabs(tabs.TabGroup):
     sticky = True
     tabs = (ReachabilityTestsTab, ReachabilityTestsAdminTab,
             NetworkTemplateTab, NetworkTemplateAdminTab,
-            rr_tabs.RulesGridTab, rr_tabs.RouterRulesTab)
+            rr_tabs.RulesGridTab, rr_tabs.RouterRulesTab,
+            routes_tabs.RoutesTab)
