@@ -38,7 +38,7 @@
 
   ];
 
-  function tableController(toastService, neutron, $modal, $scope) {
+  function tableController(toastService, neutron, $modal) {
     var ctrl = this;
 
     neutron.reachabilitytest_list().success(

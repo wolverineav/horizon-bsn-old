@@ -15,6 +15,7 @@
  */
 
 (function() {
+  debugger;
   'use strict';
   /**
    * @ngdoc overview
@@ -60,9 +61,11 @@
       });
 
     function listFunction() {
-      return bsnneutron.networktemplate_list().then(function(list) {
-        return list;
-      });
+      return bsnneutron.networktemplate_list().success(returnResponse);
+
+      function returnResponse(response) {
+        return response;
+      }
     }
   }
 
@@ -84,7 +87,7 @@
     var path = $windowProvider.$get().STATIC_URL + 'networktemplate/';
     $provide.constant('horizon.app.core.networktemplate.basePath', path);
 
-    $routeProvider.when('/bsndashboard/networktemplate/', {
+    $routeProvider.when('/bsndashboard/', {
       templateUrl: path + 'panel.html'
     });
   }

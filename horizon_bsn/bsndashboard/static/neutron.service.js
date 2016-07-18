@@ -87,6 +87,7 @@
      * @returns {Object} An object with property "items." Each item is a test.
      */
     function reachabilitytest_list() {
+      debugger;
       return apiService.get('/api/neutron/reachabilitytests/')
         .error(function () {
           toastService.add('error', gettext('Error getting reachability tests'));
@@ -100,23 +101,12 @@
      * @returns {Object} An object with property "items." Each item is a test.
      */
     function networktemplate_list() {
-
-      return {
-        "items": [
-          {
-            "body": "heat_template_version: 2013-05-23\r\n\r\ndescription: >\r\n  Template to create a three tier topology connected by a router.\r\n\r\nparameters:\r\n  out_net_name:\r\n    type: string\r\n    label: Outer Tier Name\r\n    description: Name to assign to the tier exposed to the Internet\r\n    default: web\r\n  out_net_cidr:\r\n    type: string\r\n    label: Outer network CIDR\r\n    description: Network address for the outer tier (CIDR notation)\r\n  mid_net_name:\r\n    type: string\r\n    label: Middle Tier Name\r\n    description: Name to assign to the tier exposed to the outer tier\r\n    default: app\r\n  mid_net_cidr:\r\n    type: string\r\n    label: Middle network CIDR\r\n    description: Network address for middle tier (CIDR notation)\r\n  inner_net_name:\r\n    type: string\r\n    label: Inner Tier Name\r\n    description: Name to assign to the tier exposed to the middle tier\r\n    default: db\r\n  inner_net_cidr:\r\n    type: string\r\n    label: Inner network CIDR\r\n    description: Network address for inner tier (CIDR notation)\r\n\r\n\r\nresources:\r\n  out_net:\r\n    type: OS::Neutron::Net\r\n    properties:\r\n      name: { get_param: out_net_name }\r\n  mid_net:\r\n    type: OS::Neutron::Net\r\n    properties:\r\n      name: { get_param: mid_net_name }\r\n  inner_net:\r\n    type: OS::Neutron::Net\r\n    properties:\r\n      name: { get_param: inner_net_name }\r\n\r\n  out_subnet:\r\n    type: OS::Neutron::Subnet\r\n    properties:\r\n      network_id: { get_resource: out_net }\r\n      cidr: { get_param: out_net_cidr }\r\n  mid_subnet:\r\n    type: OS::Neutron::Subnet\r\n    properties:\r\n      network_id: { get_resource: mid_net }\r\n      cidr: { get_param: mid_net_cidr }\r\n  inner_subnet:\r\n    type: OS::Neutron::Subnet\r\n    properties:\r\n      network_id: { get_resource: inner_net }\r\n      cidr: { get_param: inner_net_cidr }\r\n\r\n  router:\r\n    type: OS::Neutron::Router\r\n\r\n  router_interface:\r\n    type: OS::Neutron::RouterInterface\r\n    properties:\r\n      router_id: { get_resource: router }\r\n      subnet_id: { get_resource: out_subnet }\r\n  router_interface:\r\n    type: OS::Neutron::RouterInterface\r\n    properties:\r\n      router_id: { get_resource: router }\r\n      subnet_id: { get_resource: mid_subnet }\r\n  router_interface:\r\n    type: OS::Neutron::RouterInterface\r\n    properties:\r\n      router_id: { get_resource: router }\r\n      subnet_id: { get_resource: inner_subnet }\r\n",
-            "id": "3edc7c1c-9b80-4f4c-b6e3-d42fd955333c",
-            "name": "xiong-template"
-          }
-        ]
-      };
-
-      // return apiService.get('/api/neutron/networktemplate/')
-      //   .error(function () {
-      //     toastService.add('error', gettext('Error getting network template'));
-      //   });
+      debugger;
+      return apiService.get('api/neutron/networktemplate/')
+        .error(function() {
+          toastService.add('error', gettext('Error getting networktemplate'));
+        });
     }
-
   }
 
 }());
