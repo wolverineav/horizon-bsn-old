@@ -39,7 +39,6 @@ def get_route_diff(existing_routes, new_routes):
         return routes_added, routes_removed
 
 
-
 def popup_messages(request, old_routeset, new_routeset):
     added_routes, deleted_routes = get_route_diff(
         old_routeset, new_routeset)

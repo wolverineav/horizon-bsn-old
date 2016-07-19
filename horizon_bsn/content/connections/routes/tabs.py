@@ -14,7 +14,6 @@
 
 from django.utils.translation import ugettext_lazy as _
 from horizon import tabs
-from openstack_dashboard import api
 
 from horizon_bsn.api import neutron as bsn_neutron
 from horizon_bsn.content.connections.routes import tables as routestable

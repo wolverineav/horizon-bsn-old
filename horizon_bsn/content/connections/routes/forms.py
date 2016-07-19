@@ -15,12 +15,11 @@
 import logging
 
 from django.core.exceptions import ValidationError  # noqa
-from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
-
 from horizon import exceptions
 from horizon import forms
 from horizon import messages
+
 from horizon_bsn.content.connections.routes import routemanager
 
 LOG = logging.getLogger(__name__)
@@ -74,9 +73,8 @@ class AddRoute(forms.SelfHandlingForm):
         try:
             new_route = {'destination': data['destination'],
                          'nexthops': data['nexthops'].split(',')}
-            router = routemanager.add_route(request,
-                                           router_id=data['router_id'],
-                                           newroute=new_route)
+            router = routemanager.add_route(
+                request, router_id=data['router_id'], newroute=new_route)
 
             msg = (_("Static Route %s was successfully created")
                    % router.routes)
@@ -97,13 +95,11 @@ class UpdateForm(AddRoute):
 
     def handle(self, request, data, **kwargs):
         try:
-            id = data['id']
             new_route = {'id': data['id'],
                          'destination': data['destination'],
                          'nexthops': data['nexthops'].split(',')}
-            router = routemanager.update_route(request,
-                                              router_id=data['router_id'],
-                                              updated_route=new_route)
+            router = routemanager.update_route(
+                request, router_id=data['router_id'], updated_route=new_route)
             msg = (_("Static Route %s was successfully updated.")
                    % router.routes)
             LOG.debug(msg)

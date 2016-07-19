@@ -22,7 +22,6 @@ from horizon import forms
 from horizon.utils import memoized
 from openstack_dashboard import api
 
-from horizon_bsn.api import neutron as bsn_neutron
 from horizon_bsn.content.connections.routes import forms as routeforms
 
 
@@ -86,7 +85,8 @@ class UpdateRouteView(forms.ModalFormView):
             exists, route = _get_route_if_exists(router['routes'],
                                                  int(self.kwargs['id']))
             if not exists:
-                raise Exception("Route you're trying to modify doesn't exists anymore.")
+                raise Exception("Route you're trying to modify "
+                                "doesn't exists anymore.")
             router._apidict['update_route'] = route
             return router
         except Exception as e:
