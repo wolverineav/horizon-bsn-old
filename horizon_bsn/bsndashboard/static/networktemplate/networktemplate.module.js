@@ -15,35 +15,35 @@
  */
 
 (function() {
-  debugger;
   'use strict';
   /**
    * @ngdoc overview
-   * @ngname horizon.dashboard.bsndashboard.networktemplate
+   * @ngname bsn.bsndashboard.networktemplate
    *
    * @description
    * Provides all of the services and widgets required
    * to support and display network template related content.
    */
   angular
-    .module('horizon.dashboard.bsndashboard.networktemplate', [
-      'ngRoute'
+    .module('bsn.bsndashboard.networktemplate', [
+      'ngRoute',
+      'bsn.bsndashboard.networktemplate.actions',
     ])
-    .constant('horizon.app.core.networktemplate.resourceType', 'BSN::Neutron::NetworkTemplate')
+    .constant('bsn.bsndashboard.networktemplate.resourceType', 'BSN::Neutron::NetworkTemplate')
     .run(run)
     .config(config);
 
   run.$inject = [
     'horizon.framework.conf.resource-type-registry.service',
     'horizon.app.core.openstack-service-api.bsnneutron',
-    'horizon.app.core.networktemplate.basePath',
-    'horizon.app.core.networktemplate.resourceType'
+    'bsn.bsndashboard.networktemplate.basePath',
+    'bsn.bsndashboard.networktemplate.resourceType'
   ];
 
   function run(registry, bsnneutron, basePath, networktemplateResourceType) {
     registry.getResourceType(networktemplateResourceType)
-      .setNames(gettext('Network Template'))
-      //.setSummaryTemplateUrl(basePath + 'details/drawer.html') Drawer needed if details
+      .setNames(gettext('Network Template'), gettext('Network Templates'))
+      .setSummaryTemplateUrl(basePath + 'drawer/drawer.html')
       .setProperty('template_name', {
         label: gettext('Template Name')
       })
@@ -54,17 +54,18 @@
         priority: 1,
         sortDefault: true,
       })
-      .append({
-        id: 'body',
-        priority: 2,
-        filters: []
-      });
+
 
     function listFunction() {
-      return bsnneutron.networktemplate_list().success(returnResponse);
+      return bsnneutron.networktemplate_list().success(modifyResponse);
 
-      function returnResponse(response) {
-        return response;
+      function modifyResponse(response) {
+        return {data: {items: response.items.map(addTrackBy)}};
+
+        function addTrackBy(template) {
+          template.trackBy = template.name;
+          return template;
+        }
       }
     }
   }
@@ -85,7 +86,7 @@
    */
   function config($provide, $windowProvider, $routeProvider) {
     var path = $windowProvider.$get().STATIC_URL + 'networktemplate/';
-    $provide.constant('horizon.app.core.networktemplate.basePath', path);
+    $provide.constant('bsn.bsndashboard.networktemplate.basePath', path);
 
     $routeProvider.when('/bsndashboard/', {
       templateUrl: path + 'panel.html'

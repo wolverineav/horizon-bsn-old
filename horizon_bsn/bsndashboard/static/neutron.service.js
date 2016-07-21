@@ -41,7 +41,7 @@
       // reachabilitytest_update: reachabilitytest_update,
       // reachabilitytest_delete: reachabilitytest_delete,
       //
-      // networktemplate_create: networktemplate_create,
+      networktemplate_create: networktemplate_create,
       networktemplate_list: networktemplate_list,
       // networktemplate_get: networktemplate_get,
       // networktemplate_update: networktemplate_update,
@@ -87,7 +87,6 @@
      * @returns {Object} An object with property "items." Each item is a test.
      */
     function reachabilitytest_list() {
-      debugger;
       return apiService.get('/api/neutron/reachabilitytests/')
         .error(function () {
           toastService.add('error', gettext('Error getting reachability tests'));
@@ -100,8 +99,20 @@
      *
      * @returns {Object} An object with property "items." Each item is a test.
      */
+    function networktemplate_create(template) {
+      return apiService.post('api/neutron/networktemplate/', template)
+        .error(function() {
+          toastService.add('error', gettext('Error creating networktemplate'));
+        });
+    }
+
+    /**
+     * @name reachabilitytest_list
+     * @description Get the list of reachability tests.
+     *
+     * @returns {Object} An object with property "items." Each item is a test.
+     */
     function networktemplate_list() {
-      debugger;
       return apiService.get('api/neutron/networktemplate/')
         .error(function() {
           toastService.add('error', gettext('Error getting networktemplate'));

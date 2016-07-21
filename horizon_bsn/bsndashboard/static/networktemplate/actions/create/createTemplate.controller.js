@@ -17,7 +17,28 @@
 (function() {
   'use strict';
 
+  /**
+   * @ngdoc reachabilityTestController
+   * @ngController
+   *
+   * @description
+   * Controller for reachability tests.
+   * Serve as the focal point for table actions.
+   */
+
   angular
-    .module('horizon.dashboard.bsndashboard.reachabilitytests', []);
+    .module('bsn.bsndashboard.networktemplate')
+    .controller('CreateController', createController);
+
+    createController.$inject = [
+    ]
+
+
+  function createController() {
+    var ctrl = this;
+    ctrl.model = {};
     
+
+  }
+
 })();

@@ -46,3 +46,8 @@ class NetworkTemplate(generic.View):
     def get(self, request):
         result = neutron.networktemplate_list(request)
         return {'items': [n.to_dict() for n in result]}
+
+    @rest_utils.ajax()
+    def post(self, request):
+        result = neutron.networktemplate_create(request, **request.DATA)
+        return result

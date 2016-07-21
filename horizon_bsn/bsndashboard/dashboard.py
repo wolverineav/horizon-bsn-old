@@ -18,7 +18,7 @@ import horizon
 class Bsndashboard(horizon.Dashboard):
     name = _("BSN Dashboard")
     slug = "bsndashboard"
-    default_panel = 'reachabilitytests'  # Specify the slug of the dashboard's default panel.
+    default_panel = 'networktemplate'  # Specify the slug of the dashboard's default panel.
 
 
 horizon.register(Bsndashboard)

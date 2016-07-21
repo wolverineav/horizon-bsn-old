@@ -18,8 +18,8 @@
   'use strict';
 
   angular
-    .module('horizon.dashboard.bsndashboard',
-      ['horizon.dashboard.bsndashboard.reachabilitytests',
-      'horizon.dashboard.bsndashboard.networktemplate']);
+    .module('bsn.bsndashboard',
+      [//'bsn.bsndashboard.reachabilitytests',
+      'bsn.bsndashboard.networktemplate']);
 
 })();
