@@ -19,33 +19,33 @@
 
   angular
     .module('bsn.bsndashboard.networktemplate.actions')
-    .factory('bsn.bsndashboard.networktemplate.actions.create.service', createService);
+    .factory('bsn.bsndashboard.networktemplate.actions.update.service', updateTemplateService);
 
-  createService.$inject = [
+  updateTemplateService.$inject = [
     'bsn.bsndashboard.networktemplate.resourceType',
     'horizon.app.core.openstack-service-api.bsnneutron',
     'horizon.framework.widgets.toast.service',
     '$modal',
     'horizon.framework.util.actions.action-result.service',
+    '$rootScope'
   ];
 
   /**
    * @ngDoc factory
-   * @name horizon.app.core.images.actions.createService
+   * @name horizon.app.core.images.actions.updateTemplateService
    * @Description A service to open the user wizard.
    */
-  function createService(
+  function updateTemplateService(
     resourceType,
     bsnneutron,
     toast,
     $modal,
-    actionResultService
+    actionResultService,
+    $rootScope
   ) {
     var message = {
-      success: gettext('Template was successfully created.')
+      success: gettext('Template was successfully updated.')
     };
-
-    var model = {};
 
     var service = {
       perform: perform,
@@ -63,29 +63,32 @@
       return promise;
     }
 
-    function perform() {
+    function perform(template) {
+      $rootScope.template = template;
       var localSpec = {
+        scope: $rootScope,
         backdrop: 'static',
-        controller: 'CreateController as ctrl',
-        templateUrl: '/static/networktemplate/actions/create/createModal.html'
+        controller: 'updateController as ctrl',
+        templateUrl: '/static/networktemplate/actions/update/updateModal.html'
       };
 
-      return $modal.open(localSpec).result.then(function create(result) {
+      return $modal.open(localSpec).result.then(function update(result) {
         return submit(result);
       });
     }
 
     function submit(result) {
-      return bsnneutron.networktemplate_create(result).then(onCreateTemplate);
+      debugger;
+      return bsnneutron.networktemplate_update(result.id, result).then(onUpdateTemplate);
     }
 
-    function onCreateTemplate(response) {
+    function onUpdateTemplate(response) {
       var newTemplate = response.data;
       toast.add('success', interpolate(message.success, [newTemplate.name]));
       return actionResultService.getActionResult()
-        .created(resourceType, newTemplate.id)
+        .updated(resourceType, newTemplate.id)
         .result;
     }
 
-  } // end of createService
+  } // end of updateTemplateService
 })(); // end of IIFE

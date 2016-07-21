@@ -40,13 +40,13 @@
       // reachabilitytest_get: reachabilitytest_get,
       // reachabilitytest_update: reachabilitytest_update,
       // reachabilitytest_delete: reachabilitytest_delete,
-      //
+
       networktemplate_create: networktemplate_create,
       networktemplate_list: networktemplate_list,
-      // networktemplate_get: networktemplate_get,
-      // networktemplate_update: networktemplate_update,
-      // networktemplate_delete: networktemplate_delete,
-      //
+      networktemplate_get: networktemplate_get,
+      networktemplate_update: networktemplate_update,
+      networktemplate_delete: networktemplate_delete,
+
       // networktemplateassignment_create: networktemplateassignment_create,
       // networktemplateassignment_list: networktemplateassignment_list,
       // networktemplateassignment_get: networktemplateassignment_get,
@@ -115,9 +115,49 @@
     function networktemplate_list() {
       return apiService.get('api/neutron/networktemplate/')
         .error(function() {
+          toastService.add('error', gettext('Error getting networktemplates'));
+        });
+    }
+
+    /**
+     * @name reachabilitytest_list
+     * @description Get the list of reachability tests.
+     *
+     * @returns {Object} An object with property "items." Each item is a test.
+     */
+    function networktemplate_get(id) {
+      return apiService.get('api/neutron/networktemplate/' + id + '/')
+        .error(function() {
           toastService.add('error', gettext('Error getting networktemplate'));
         });
     }
+
+    /**
+     * @name reachabilitytest_list
+     * @description Get the list of reachability tests.
+     *
+     * @returns {Object} An object with property "items." Each item is a test.
+     */
+    function networktemplate_update(id, template) {
+      return apiService.patch('api/neutron/networktemplate/' + id + '/', template)
+        .error(function() {
+          toastService.add('error', gettext('Error updating networktemplate'));
+        });
+    }
+
+    /**
+     * @name reachabilitytest_list
+     * @description Get the list of reachability tests.
+     *
+     * @returns {Object} An object with property "items." Each item is a test.
+     */
+    function networktemplate_delete(id) {
+      return apiService.delete('api/neutron/networktemplate/' + id + '/')
+        .error(function() {
+          toastService.add('error', gettext('Error deleting networktemplate'));
+        });
+    }
+
   }
 
 }());

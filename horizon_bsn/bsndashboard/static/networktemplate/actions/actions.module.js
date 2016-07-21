@@ -31,26 +31,35 @@
   registerNetworkTemplateActions.$inject = [
     'horizon.framework.conf.resource-type-registry.service',
     'bsn.bsndashboard.networktemplate.actions.create.service',
-    // 'bsn.bsndashboard.networktemplate.actions.delete.service',
+    'bsn.bsndashboard.networktemplate.actions.update.service',
+    'bsn.bsndashboard.networktemplate.actions.delete.service',
     'bsn.bsndashboard.networktemplate.resourceType'
   ];
 
   function registerNetworkTemplateActions(
     registry,
     createTemplateService,
-    //deleteTemplateService,
+    updateTemplateService,
+    deleteTemplateService,
     networkTemplateResourceTypeCode
   ) {
     var networkTemplateResourceType = registry.getResourceType(networkTemplateResourceTypeCode);
-    // networkTemplateResourceType.itemActions
-    //   .append({
-    //     id: 'deleteTemplateService',
-    //     service: deleteTemplateService,
-    //     template: {
-    //       text: gettext('Delete'),
-    //       type: 'delete'
-    //     }
-    //   });
+    networkTemplateResourceType.itemActions
+      .append({
+        id: 'updateTemplateService',
+        service: updateTemplateService,
+        template: {
+          text: gettext('Edit')
+        }
+      })
+      .append({
+        id: 'deleteTemplateService',
+        service: deleteTemplateService,
+        template: {
+          text: gettext('Delete'),
+          type: 'delete'
+        }
+      });
 
     networkTemplateResourceType.globalActions
       .append({
@@ -62,15 +71,15 @@
         }
       });
 
-    // imageResourceType.batchActions
-    //   .append({
-    //     id: 'batchDeleteImageAction',
-    //     service: deleteImageService,
-    //     template: {
-    //       type: 'delete-selected',
-    //       text: gettext('Delete Images')
-    //     }
-    //   });
+    networkTemplateResourceType.batchActions
+      .append({
+        id: 'batchDeleteImageAction',
+        service: deleteTemplateService,
+        template: {
+          type: 'delete-selected',
+          text: gettext('Delete Images')
+        }
+      });
   }
 
 })();

@@ -40,14 +40,34 @@ class ReachabilityTests(generic.View):
 @urls.register
 class NetworkTemplate(generic.View):
     """API for BSN Neutron Network Template"""
-    url_regex = r'neutron/networktemplate/$'
+    url_regex = r'neutron/networktemplate/(?P<networktemplate_id>[^/]+|default)/$'
 
     @rest_utils.ajax()
-    def get(self, request):
-        result = neutron.networktemplate_list(request)
-        return {'items': [n.to_dict() for n in result]}
+    def get(self, request, networktemplate_id):
+        result = neutron.networktemplate_get(request, networktemplate_id)
+        return result
+
+    @rest_utils.ajax()
+    def patch(self, request, networktemplate_id):
+        result = neutron.networktemplate_update(request, networktemplate_id, **request.DATA)
+        return result
+
+    @rest_utils.ajax()
+    def delete(self, request, networktemplate_id):
+        result = neutron.networktemplate_delete(request, networktemplate_id)
+        return result
+
+@urls.register
+class NetworkTemplates(generic.View):
+    """API for BSN Neutron Network Template"""
+    url_regex = r'neutron/networktemplate/$'
 
     @rest_utils.ajax()
     def post(self, request):
         result = neutron.networktemplate_create(request, **request.DATA)
         return result
+
+    @rest_utils.ajax()
+    def get(self, request):
+        result = neutron.networktemplate_list(request)
+        return {'items': [n.to_dict() for n in result]}
