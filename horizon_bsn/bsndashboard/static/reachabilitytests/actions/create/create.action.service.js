@@ -18,34 +18,34 @@
   'use strict';
 
   angular
-    .module('bsn.bsndashboard.networktemplate.actions')
-    .factory('bsn.bsndashboard.networktemplate.actions.update.service', updateTemplateService);
+    .module('bsn.bsndashboard.reachabilitytests.actions')
+    .factory('bsn.bsndashboard.reachabilitytests.actions.create.service', createService);
 
-  updateTemplateService.$inject = [
-    'bsn.bsndashboard.networktemplate.resourceType',
+  createService.$inject = [
+    'bsn.bsndashboard.reachabilitytests.resourceType',
     'horizon.app.core.openstack-service-api.bsnneutron',
     'horizon.framework.widgets.toast.service',
     '$modal',
     'horizon.framework.util.actions.action-result.service',
-    '$rootScope'
   ];
 
   /**
    * @ngDoc factory
-   * @name horizon.app.core.images.actions.updateTemplateService
+   * @name horizon.app.core.images.actions.createService
    * @Description A service to open the user wizard.
    */
-  function updateTemplateService(
+  function createService(
     resourceType,
     bsnneutron,
     toast,
     $modal,
-    actionResultService,
-    $rootScope
+    actionResultService
   ) {
     var message = {
-      success: gettext('Template was successfully updated.')
+      success: gettext('Test was successfully created.')
     };
+
+    var model = {};
 
     var service = {
       perform: perform,
@@ -63,31 +63,29 @@
       return promise;
     }
 
-    function perform(template) {
-      $rootScope.template = template;
+    function perform() {
       var localSpec = {
-        scope: $rootScope,
         backdrop: 'static',
-        controller: 'updateController as ctrl',
-        templateUrl: '/static/networktemplate/actions/update/updateModal.html'
+        controller: 'CreateReachTestController as ctrl',
+        templateUrl: '/static/reachabilitytests/actions/create/createModal.html'
       };
 
-      return $modal.open(localSpec).result.then(function update(result) {
+      return $modal.open(localSpec).result.then(function create(result) {
         return submit(result);
       });
     }
 
     function submit(result) {
-      return bsnneutron.networktemplate_update(result.id, result).then(onUpdateTemplate);
+      return bsnneutron.reachabilitytest_create(result).then(onCreateTest);
     }
 
-    function onUpdateTemplate(response) {
-      var newTemplate = response.data;
-      toast.add('success', interpolate(message.success, [newTemplate.name]));
+    function onCreateTest(response) {
+      var newTest = response.data;
+      toast.add('success', interpolate(message.success, [newTest.name]));
       return actionResultService.getActionResult()
-        .updated(resourceType, newTemplate.id)
+        .created(resourceType, newTest.id)
         .result;
     }
 
-  } // end of updateTemplateService
+  } // end of createService
 })(); // end of IIFE

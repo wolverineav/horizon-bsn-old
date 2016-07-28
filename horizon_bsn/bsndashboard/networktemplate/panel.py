@@ -17,8 +17,6 @@ from horizon_bsn.bsndashboard import dashboard
 
 
 class Networktemplate(horizon.Panel):
-    name = _("Network Template")
+    name = _("Admin Network Template")
     slug = "networktemplate"
-
-
 dashboard.Bsndashboard.register(Networktemplate)

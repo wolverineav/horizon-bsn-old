@@ -17,12 +17,36 @@
 (function() {
   'use strict';
 
+  /**
+   * @ngdoc reachabilityTestController
+   * @ngController
+   *
+   * @description
+   * Controller for reachability tests.
+   * Serve as the focal point for table actions.
+   */
+
   angular
-    .module('bsn.bsndashboard',
-      ['bsn.bsndashboard.reachabilitytests',
-      'bsn.bsndashboard.networktemplate',
-      'bsn.bsndashboard.networktemplateassignment',
-      'bsn.bsndashboard.routerrules',
-    ]);
+    .module('bsn.bsndashboard.routerrules')
+    .controller('CreateController', createController);
+
+    createController.$inject = [
+      'horizon.app.core.openstack-service-api.bsnneutron'
+    ]
+
+
+  function createController(bsnneutron) {
+    var ctrl = this;
+
+    bsnneutron.router_get({}).then(
+      function(result) {
+        ctrl.router = result;
+      }
+    );
+
+    ctrl.model = {};
+    ctrl.model.nexthops = "";
+    ctrl.model.priority = -1;
+  }
 
 })();

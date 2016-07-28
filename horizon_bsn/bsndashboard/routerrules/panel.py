@@ -10,16 +10,13 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+import horizon
 from django.utils.translation import ugettext_lazy as _
 
-import horizon
-
-import horizon_bsn.api.rest.neutron  # noqa
-
-class Bsndashboard(horizon.Dashboard):
-    name = _("BSN Dashboard")
-    slug = "bsndashboard"
-    default_panel = 'networktemplate'  # Specify the slug of the dashboard's default panel.
+from horizon_bsn.bsndashboard import dashboard
 
 
-horizon.register(Bsndashboard)
+class Routerrules(horizon.Panel):
+    name = _("Router Rules")
+    slug = "routerrules"
+dashboard.Bsndashboard.register(Routerrules)

@@ -18,34 +18,46 @@
   'use strict';
   /**
    * @ngdoc overview
-   * @ngname bsn.bsndashboard.networktemplate
+   * @ngname bsn.bsndashboard.networktemplateassignment
    *
    * @description
    * Provides all of the services and widgets required
    * to support and display network template related content.
    */
   angular
-    .module('bsn.bsndashboard.networktemplate', [
+    .module('bsn.bsndashboard.networktemplateassignment', [
       'ngRoute',
-      'bsn.bsndashboard.networktemplate.actions',
+      'bsn.bsndashboard.networktemplateassignment.actions',
     ])
-    .constant('bsn.bsndashboard.networktemplate.resourceType', 'BSN::Neutron::NetworkTemplate')
+    .constant('bsn.bsndashboard.networktemplateassignment.resourceType', 'BSN::Neutron::NetworkTemplateAssignment')
     .run(run)
     .config(config);
 
   run.$inject = [
     'horizon.framework.conf.resource-type-registry.service',
     'horizon.app.core.openstack-service-api.bsnneutron',
-    'bsn.bsndashboard.networktemplate.basePath',
-    'bsn.bsndashboard.networktemplate.resourceType'
+    'bsn.bsndashboard.networktemplateassignment.basePath',
+    'bsn.bsndashboard.networktemplateassignment.resourceType'
   ];
 
-  function run(registry, bsnneutron, basePath, networktemplateResourceType) {
-    registry.getResourceType(networktemplateResourceType)
-      .setNames(gettext('Network Template'), gettext('Network Templates'))
+  function run(registry, bsnneutron, basePath, networktemplateassignmentResourceType) {
+    registry.getResourceType(networktemplateassignmentResourceType)
+      .setNames(gettext('Network Template Assignment'), gettext('Network Template Assignment'))
       .setSummaryTemplateUrl(basePath + 'drawer/drawer.html')
       .setProperty('name', {
-        label: gettext('Name')
+        label: gettext('Template Name')
+      })
+      .setProperty('heat_stack_name', {
+        label: gettext('Heat Stack Name')
+      })
+      .setProperty('description', {
+        label: gettext('Description')
+      })
+      .setProperty('resources', {
+        label: gettext('Resources')
+      })
+      .setProperty('status', {
+        label: gettext('Status')
       })
       .setListFunction(listFunction)
       .tableColumns
@@ -54,14 +66,33 @@
         priority: 1,
         sortDefault: true,
       })
+      .append({
+        id: 'heat_stack_name',
+        priority: 1,
+        sortDefault: true,
+      })
+      .append({
+        id: 'description',
+        priority: 1,
+        sortDefault: true,
+      })
+      .append({
+        id: 'resources',
+        priority: 1,
+        sortDefault: true,
+      })
+      .append({
+        id: 'status',
+        priority: 1,
+        sortDefault: true,
+      })
 
 
     function listFunction() {
-      return bsnneutron.networktemplate_list().success(modifyResponse);
+      return bsnneutron.networktemplateassignment_list().success(modifyResponse);
 
       function modifyResponse(response) {
-        var returnvalue = {data: {items: response.items.map(addTrackBy)}};
-        return returnvalue;
+        return {data: {items: response.items.map(addTrackBy)}};
 
         function addTrackBy(template) {
           template.trackBy = template.name;
@@ -86,10 +117,10 @@
    * @returns {undefined} Returns nothing
    */
   function config($provide, $windowProvider, $routeProvider) {
-    var path = $windowProvider.$get().STATIC_URL + 'networktemplate/';
-    $provide.constant('bsn.bsndashboard.networktemplate.basePath', path);
+    var path = $windowProvider.$get().STATIC_URL + 'networktemplateassignment/';
+    $provide.constant('bsn.bsndashboard.networktemplateassignment.basePath', path);
 
-    $routeProvider.when('/bsndashboard/', {
+    $routeProvider.when('/bsndashboard/networktemplateassignment/', {
       templateUrl: path + 'panel.html'
     });
   }

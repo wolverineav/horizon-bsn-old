@@ -66,7 +66,7 @@
     function perform() {
       var localSpec = {
         backdrop: 'static',
-        controller: 'CreateController as ctrl',
+        controller: 'CreateNetTemplateController as ctrl',
         templateUrl: '/static/networktemplate/actions/create/createModal.html'
       };
 

@@ -23,7 +23,6 @@ from horizon_bsn.content.connections.routerrules \
     import urls as routerrules_urls
 from horizon_bsn.content.connections import views
 
-import horizon_bsn.api.rest.neutron  # noqa
 
 import os
 

@@ -27,18 +27,34 @@
    */
 
   angular
-    .module('bsn.bsndashboard.networktemplate.actions')
-    .controller('CreateNetTemplateController', createController);
+    .module('bsn.bsndashboard.reachabilitytests')
+    .controller('CreateReachTestController', createController);
 
     createController.$inject = [
+      'horizon.app.core.openstack-service-api.keystone',
+      'horizon.app.core.openstack-service-api.neutron'
     ]
 
 
-  function createController() {
+  function createController(keystone, neutron) {
     var ctrl = this;
     ctrl.model = {};
-    
+    ctrl.user;
+    ctrl.networks;
 
+    // Get the current tenant
+    keystone.getCurrentUserSession().success(
+      function(user) {
+        ctrl.user = user;
+      }
+    );
+
+    // Get the current tenant's segments
+    neutron.getNetworks().success(
+      function(networks) {
+        ctrl.networks = networks;
+      }
+    );
   }
 
 })();
