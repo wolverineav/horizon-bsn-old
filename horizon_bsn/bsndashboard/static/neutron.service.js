@@ -53,15 +53,14 @@
       // networktemplateassignment_update: networktemplateassignment_update,
       networktemplateassignment_delete: networktemplateassignment_delete,
       //
-      // reachabilityquicktest_create: reachabilityquicktest_create,
+      reachabilityquicktest_create: reachabilityquicktest_create,
       // reachabilityquicktest_list: reachabilityquicktest_list,
-      // reachabilityquicktest_get: reachabilityquicktest_get,
-      // reachabilityquicktest_update: reachabilityquicktest_update,
+      reachabilityquicktest_get: reachabilityquicktest_get,
+      reachabilityquicktest_update: reachabilityquicktest_update,
       // reachabilityquicktest_delete: reachabilityquicktest_delete
 
       router_get: router_get,
-      routerrules_create: routerrules_create,
-      routerrules_list: routerrules_list
+      router_update: router_update
     };
 
     return service;
@@ -126,6 +125,54 @@
       return apiService.delete('api/neutron/reachabilitytests/' + id + '/')
         .error(function() {
           toastService.add('error', gettext('Error deleting reachability test'));
+        });
+    }
+
+    /**
+     * //////////////////////////////////////////
+     * QUICK TESTS
+     * //////////////////////////////////////////
+     */
+
+    /**
+     * @name reachabilityquicktest_get
+     * @param {Object} test - The test
+     * @description Get a reachability quick test.
+     *
+     * @returns {Object} The result of the get call.
+     */
+    function reachabilityquicktest_get(tenant_id) {
+      return apiService.get('api/neutron/reachabilitytests/' + tenant_id + '/')
+        .error(function () {
+          toastService.add('error', gettext('Error getting reachability test'));
+        });
+    }
+
+    /**
+     * @name reachabilityquicktest_create
+     * @param {Object} test - The test
+     * @description Create a reachability quick test.
+     *
+     * @returns {Object} The result of the creation call.
+     */
+    function reachabilityquicktest_create(test) {
+      return apiService.post('api/neutron/reachabilitytests/', test)
+        .error(function () {
+          toastService.add('error', gettext('Error creating reachability test'));
+        });
+    }
+
+    /**
+     * @name reachabilityquicktest_patch
+     * @param {Object} test - The test
+     * @description Patch a reachability quick test.
+     *
+     * @returns {Object} The result of the patch call.
+     */
+    function reachabilityquicktest_update(tenant_id, test) {
+      return apiService.patch('api/neutron/reachabilitytests/' + tenant_id + '/', test)
+        .error(function () {
+          toastService.add('error', gettext('Error patching reachability test'));
         });
     }
 
@@ -226,10 +273,20 @@
      * @returns {Object} An object with property "items." Each item is a test.
      */
     function networktemplateassignment_delete(id) {
-      return apiService.delete('api/neutron/networktemplateassignment/' + id + '/')
-        .error(function() {
+      return apiService.delete('api/neutron/networktemplateassignment/' + id + '/').then(
+        function success(response) {
+          debugger;
+          return response;
+        },
+        function error() {
+          debugger;
           toastService.add('error', gettext('Error deleting network template assignment'));
-        });
+        },
+        function notify() {
+          debugger;
+          console.log("Here's a notification");
+        }
+      );
     }
 
     /**
@@ -245,17 +302,10 @@
         });
     }
 
-    function routerrules_list() {
-      return apiService.get('api/neutron/routerrules/')
+    function router_update(router) {
+      return apiService.patch('api/neutron/router/', router)
         .error(function() {
-          toastService.add('error', gettext('Error getting router rules'));
-        });
-    }
-
-    function routerrules_create(rule) {
-      return apiService.post('api/neutron/routerrules/', rule)
-        .error(function() {
-          toastService.add('error', gettext('Error creating router rule'));
+          toastService.add('error', gettext('Error updating router'));
         });
     }
 

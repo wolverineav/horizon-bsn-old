@@ -33,6 +33,7 @@
     'bsn.bsndashboard.reachabilitytests.actions.create.service',
     'bsn.bsndashboard.reachabilitytests.actions.run.service',
     'bsn.bsndashboard.reachabilitytests.actions.delete.service',
+    'bsn.bsndashboard.reachabilitytests.actions.quick.service',
     'bsn.bsndashboard.reachabilitytests.resourceType'
   ];
 
@@ -41,6 +42,7 @@
     createTestService,
     runTestService,
     deleteTestService,
+    quickTestService,
     reachabilityTestsResourceTypeCode
   ) {
     var reachabilityTestsResourceType = registry.getResourceType(reachabilityTestsResourceTypeCode);
@@ -69,6 +71,14 @@
           text: gettext('Create Test'),
           type: 'create'
         }
+      })
+      .append({
+        id: 'quickTestService',
+        service: quickTestService,
+        template: {
+          text: gettext('Create Quick Test'),
+          type: 'create'
+        }
       });
 
     reachabilityTestsResourceType.batchActions
@@ -77,7 +87,7 @@
         service: deleteTestService,
         template: {
           type: 'delete-selected',
-          text: gettext('Delete Images')
+          text: gettext('Delete Tests')
         }
       });
   }

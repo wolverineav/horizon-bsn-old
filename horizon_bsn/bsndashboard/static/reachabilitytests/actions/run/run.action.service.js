@@ -57,7 +57,8 @@
     //////////////
 
     function perform(test) {
-      return bsnneutron.reachabilitytest_run(test.id).then(onRunTest(test));
+      var outcome = bsnneutron.reachabilitytest_run(test.id).then(onRunTest);
+      return outcome;
     }
 
     function allowed() {
@@ -69,7 +70,7 @@
     }
 
     function onRunTest(response) {
-      var test = response;
+      var test = response.data;
       toast.add('success', interpolate(message.success, [test.name]));
       return actionResultService.getActionResult()
         .updated(resourceType, test.id)

@@ -16,40 +16,36 @@
   'use strict';
 
   angular
-    .module('bsn.bsndashboard.networktemplateassignment.actions')
-    .factory('bsn.bsndashboard.networktemplateassignment.actions.remove.service', deleteTemplateService);
+    .module('bsn.bsndashboard.routerrules.actions')
+    .factory('bsn.bsndashboard.routerrules.actions.delete.service', deleteRuleService);
 
-  deleteTemplateService.$inject = [
+  deleteRuleService.$inject = [
     'horizon.app.core.openstack-service-api.bsnneutron',
-    'horizon.app.core.openstack-service-api.keystone',
     'horizon.framework.util.actions.action-result.service',
-    'horizon.framework.util.i18n.gettext',
     'horizon.framework.widgets.modal.deleteModalService',
-    'horizon.framework.widgets.toast.service',
-    'bsn.bsndashboard.networktemplateassignment.resourceType',
-    '$rootScope'
+    'bsn.bsndashboard.routerrules.resourceType',
+    '$rootScope',
+    'bsn.bsndashboard.routerrules.router',
   ];
 
   /*
    * @ngdoc factory
-   * @name bsn.bsndashboard.networktemplateassignment.actions.delete.service
+   * @name bsn.bsndashboard.routerrules.actions.delete.service
 
    *
    * @Description
-   * Brings up the delete templates confirmation modal dialog.
+   * Brings up the delete rules confirmation modal dialog.
 
-   * On submit, delete given templates.
+   * On submit, delete given rules.
    * On cancel, do nothing.
    */
-  function deleteTemplateService(
+  function deleteRuleService(
     bsnneutron,
-    keystone,
     actionResultService,
-    gettext,
     deleteModal,
-    toast,
-    networktemplateassignmentResourceType,
-    $scope
+    routerrulesResourceType,
+    $scope,
+    router
   ) {
     var service = {
       allowed: allowed,
@@ -60,14 +56,19 @@
 
     //////////////
 
-    function perform(template) {
-      var context = {};
-      context.labels = labelize(1);
+    function perform(items) {
+      var rules = angular.isArray(items) ? items : [items];
+      rules.map(function(item) {
+        item.name = item.priority;
+      })
 
-      context.deleteEntity = deleteTemplate;
+      var context = {};
+      context.labels = labelize(rules.length);
+
+      context.deleteEntity = deleteRule;
 
       // bring up confirm modal
-      var outcome = deleteModal.open($scope, [template], context).then(createResult);
+      var outcome = deleteModal.open($scope, rules, context).then(createResult);
       return outcome;
     }
 
@@ -84,55 +85,51 @@
       // from the deleteModal into a standard form
       var actionResult = actionResultService.getActionResult();
       deleteModalResult.pass.forEach(function markDeleted(item) {
-        debugger;
-        actionResult.deleted(networktemplateassignmentResourceType, getEntity(item).id);
+        actionResult.deleted(routerrulesResourceType, getEntity(item).id);
       });
       deleteModalResult.fail.forEach(function markFailed(item) {
-        debugger;
-        actionResult.failed(networktemplateassignmentResourceType, getEntity(item).id);
+        actionResult.failed(routerrulesResourceType, getEntity(item).id);
       });
       return actionResult.result;
     }
 
-    function deleteTemplate() {
-      
-      // delete heat stack
-      
-      
-      // then delete 
-      return keystone.getCurrentUserSession().then(
-        function(user) {
-          debugger;
-          return bsnneutron.networktemplateassignment_delete(user.data.project_id);
+    function deleteRule(id) {
+      var newRules = [];
+      for (var rule in router.router.router_rules) {
+        if (router.router.router_rules[rule].id != id) {
+          newRules.push(router.router.router_rules[rule]);
         }
-      );
+      }
+      router.router.router_rules = newRules;
+
+      // remove the rule from the list
+      return bsnneutron.router_update(router.router);
     }
 
     function labelize(count) {
       return {
 
         title: ngettext(
-          'Confirm Delete Template',
-          'Confirm Delete Templates', count),
+          'Confirm Delete Rule',
+          'Confirm Delete Rules', count),
 
         message: ngettext(
-          'You have selected "%s". A deleted template is not recoverable.',
-          'You have selected "%s". Deleted templates are not recoverable.', count),
+          'You have selected "%s". A deleted rule is not recoverable.',
+          'You have selected "%s". Deleted rules are not recoverable.', count),
 
         submit: ngettext(
-          'Delete Template',
-          'Delete Templates', count),
+          'Delete Rule',
+          'Delete Rules', count),
 
         success: ngettext(
-          'Deleted Template: %s.',
-          'Deleted Templates: %s.', count),
+          'Deleted Rule: %s.',
+          'Deleted Rules: %s.', count),
 
         error: ngettext(
-          'Unable to delete template: %s.',
-          'Unable to delete templates: %s.', count)
+          'Unable to delete rule: %s.',
+          'Unable to delete rules: %s.', count)
       };
     }
-
 
     function getEntity(result) {
       return result.context;

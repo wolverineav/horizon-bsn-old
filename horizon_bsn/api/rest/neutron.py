@@ -22,21 +22,19 @@ from openstack_dashboard.api.rest import utils as rest_utils
 
 from horizon_bsn.api import neutron as bsnneutron
 from openstack_dashboard.api import neutron
+from openstack_dashboard.api import heat
 
 from horizon_bsn.content.connections.tabs import get_stack_topology
 from django.utils.safestring import mark_safe
 
-from horizon_bsn.content.connections.routerrules.rulemanager import routerrule_list, add_rule
+##################################################################
+# REACHABILITY TESTS
+##################################################################
 
 @urls.register
 class ReachabilityTest(generic.View):
     """API for BSN Neutron Reachability Tests"""
     url_regex = r'neutron/reachabilitytests/(?P<reachabilitytest_id>[^/]+|default)/$'
-
-    # @rest_utils.ajax()
-    # def get(self, request, networktemplate_id):
-    #     result = bsnneutron.networktemplate_get(request, networktemplate_id)
-    #     return result
 
     @rest_utils.ajax()
     def patch(self, request, reachabilitytest_id):
@@ -62,6 +60,88 @@ class ReachabilityTests(generic.View):
     def post(self, request):
         result = bsnneutron.reachabilitytest_create(request, **request.DATA)
         return result
+
+@urls.register
+class ReachabilityQuickTest(generic.View):
+    """API for BSN Neutron Reachability Tests"""
+    url_regex = r'neutron/reachabilityquicktest/(?P<reachabilityquicktest_id>[^/]+|default)/$'
+
+    @rest_utils.ajax()
+    def get(self, request, reachabilityquicktest_id):
+        result = bsnneutron.reachabilityquicktest_get(request, reachabilityquicktest_id)
+        return {'items': [n.to_dict() for n in result]}
+
+    @rest_utils.ajax()
+    def patch(self, request, reachabilitytest_id):
+        result = bsnneutron.reachabilityquicktest_update(request, reachabilitytest_id, **request.DATA)
+        return result
+
+@urls.register
+class ReachabilityQuickTest(generic.View):
+    """API for BSN Neutron Reachability Tests"""
+    url_regex = r'neutron/reachabilityquicktest/$'
+
+    @rest_utils.ajax()
+    def post(self, request):
+        result = bsnneutron.reachabilityquicktest_create(request, **request.DATA)
+        return result
+
+##################################################################
+# NETWORK TEMPLATE ASSIGNMENT
+##################################################################
+
+@urls.register
+class HeatStack(generic.View):
+    """API for Router_get"""
+    url_regex = r'heat/stack/$'
+
+    @rest_utils.ajax()
+    def delete(self, request):
+        result = neutron.router_list(request)[0]
+        return result
+
+@urls.register
+class NetworkTemplateAssignment(generic.View):
+    """API for BSN Neutron Network Template Assignment"""
+    url_regex = r'neutron/networktemplateassignment/(?P<networktemplateassignment_id>[^/]+|default)/$'
+
+    @rest_utils.ajax()
+    def delete(self, request, networktemplateassignment_id):
+        result = bsnneutron.networktemplateassignment_delete(request, networktemplateassignment_id)
+        return result
+
+@urls.register
+class NetworkTemplateAssignments(generic.View):
+    """API for BSN Neutron Network Template Assignment"""
+    url_regex = r'neutron/networktemplateassignment/$'
+
+    @rest_utils.ajax()
+    def get(self, request):
+        try:
+            topology = get_stack_topology(request)
+            if not topology.get('assign'):
+                return []
+            tabledata = {
+                'id': topology['template'].id,
+                'name': topology['template'].name,
+                'stack_id': topology['stack'].id,
+                'heat_stack_name': topology['stack'].stack_name,
+                'description': topology['stack'].description,
+                'status': topology['stack'].status,
+                'stack_status': topology['stack'].stack_status,
+                'stack_status_reason': topology['stack'].stack_status_reason,
+                'resources': mark_safe('<br>'.join([
+                    ('%s (%s)' % (r.resource_name,
+                                  r.resource_type)).replace(' ', '&nbsp;')
+                    for r in topology['stack_resources']]))
+            }
+            return {'items': [tabledata]}
+        except Exception:
+            return []
+
+##################################################################
+# NETWORK TEMPLATE
+##################################################################
 
 @urls.register
 class NetworkTemplate(generic.View):
@@ -98,44 +178,9 @@ class NetworkTemplates(generic.View):
         result = bsnneutron.networktemplate_list(request)
         return {'items': [n.to_dict() for n in result]}
 
-@urls.register
-class NetworkTemplateAssignment(generic.View):
-    """API for BSN Neutron Network Template Assignment"""
-    url_regex = r'neutron/networktemplateassignment/(?P<networktemplate_id>[^/]+|default)/$'
-
-    @rest_utils.ajax()
-    def delete(self, request, networktemplate_id):
-        result = bsnneutron.networktemplateassignment_delete(request, networktemplate_id)
-        return result
-
-@urls.register
-class NetworkTemplateAssignments(generic.View):
-    """API for BSN Neutron Network Template Assignment"""
-    url_regex = r'neutron/networktemplateassignment/$'
-
-    @rest_utils.ajax()
-    def get(self, request):
-        try:
-            topology = get_stack_topology(request)
-            if not topology.get('assign'):
-                return []
-            tabledata = {
-                'id': topology['template'].id,
-                'name': topology['template'].name,
-                'stack_id': topology['stack'].id,
-                'heat_stack_name': topology['stack'].stack_name,
-                'description': topology['stack'].description,
-                'status': topology['stack'].status,
-                'stack_status': topology['stack'].stack_status,
-                'stack_status_reason': topology['stack'].stack_status_reason,
-                'resources': mark_safe('<br>'.join([
-                    ('%s (%s)' % (r.resource_name,
-                                  r.resource_type)).replace(' ', '&nbsp;')
-                    for r in topology['stack_resources']]))
-            }
-            return {'items': [tabledata]}
-        except Exception:
-            return []
+##################################################################
+# ROUTER RULES
+##################################################################
 
 @urls.register
 class Router(generic.View):
@@ -147,28 +192,9 @@ class Router(generic.View):
         result = neutron.router_list(request)[0]
         return result
 
-@urls.register
-class RouterRule(generic.View):
-    """API for BSN Neutron Network Template Assignment"""
-    url_regex = r'neutron/routerrules/(?P<routerrule_id>[^/]+|default)/$'
-
-@urls.register
-class RouterRules(generic.View):
-    """API for BSN Neutron Network Template"""
-    url_regex = r'neutron/routerrules/$'
-
     @rest_utils.ajax()
-    def post(self, request):
-        # router rule creation
-        router_id = neutron.router_list(request)[0].id
-        result = add_rule(request, router_id, request.DATA);
+    def patch(self, request):
+        body = {'router_rules': request.DATA['router_rules']}
+        result = neutron.router_update(request, request.DATA['id'], **body)
         return result
 
-    @rest_utils.ajax()
-    def get(self, request):
-        # get router_id from tenant id and a call to neutron
-        router = neutron.router_list(request)
-        router_id = neutron.router_list(request)[0].id
-        # pass router_id as part of the call to routerrule_list
-        status, result = routerrule_list(request, router_id=router_id)
-        return {'items': result}

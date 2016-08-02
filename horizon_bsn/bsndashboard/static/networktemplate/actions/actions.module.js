@@ -73,11 +73,11 @@
 
     networkTemplateResourceType.batchActions
       .append({
-        id: 'batchDeleteImageAction',
+        id: 'batchDeleteTemplateAction',
         service: deleteTemplateService,
         template: {
           type: 'delete-selected',
-          text: gettext('Delete Images')
+          text: gettext('Delete Templates')
         }
       });
   }

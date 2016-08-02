@@ -18,6 +18,8 @@ import logging
 from openstack_dashboard.api import neutron
 from openstack_dashboard.api.neutron import NeutronAPIDictWrapper
 
+from time import sleep
+
 LOG = logging.getLogger(__name__)
 
 # initialized by core horizon app

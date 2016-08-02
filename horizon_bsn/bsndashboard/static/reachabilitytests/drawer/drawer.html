@@ -1,1 +1,34 @@
-<p>Hi this is the drawer</p>
+<div ng-controller="bsn.bsndashboard.networktemplate.DrawerController as drawerCtrl">
+
+  <div class="row">
+    <dl class="col-md-2">
+      <dt translate>Source Tenant</dt>
+      <dd>{$ item.src_tenant_name $}</dd>
+    </dl>
+
+    <dl class="col-md-2">
+      <dt translate>Source Segment</dt>
+      <dd>{$ item.src_segment_name $}</dd>
+    </dl>
+
+    <dl class="col-md-2">
+      <dt translate>Source IP</dt>
+      <dd>{$ item.src_ip $}</dd>
+    </dl>
+
+    <dl class="col-md-2">
+      <dt translate>Destination IP</dt>
+      <dd>{$ item.dst_ip $}</dd>
+    </dl>
+
+    <dl class="col-md-2">
+      <dt translate>Last Run</dt>
+      <dd>{$ item.test_time $}</dd>
+    </dl>
+
+    <dl class="col-md-2">
+      <dt translate>Status</dt>
+      <dd>{$ item.test_result $}</dd>
+    </dl>
+  </div>
+</div>

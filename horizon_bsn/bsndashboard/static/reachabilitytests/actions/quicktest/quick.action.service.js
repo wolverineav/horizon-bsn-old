@@ -18,12 +18,11 @@
   'use strict';
 
   angular
-    .module('bsn.bsndashboard.routerrules.actions')
-    .factory('bsn.bsndashboard.routerrules.actions.create.service', createService);
+    .module('bsn.bsndashboard.reachabilitytests.actions')
+    .factory('bsn.bsndashboard.reachabilitytests.actions.quick.service', quickService);
 
-  createService.$inject = [
-    'bsn.bsndashboard.routerrules.resourceType',
-    'bsn.bsndashboard.routerrules.router',
+  quickService.$inject = [
+    'bsn.bsndashboard.reachabilitytests.resourceType',
     'horizon.app.core.openstack-service-api.bsnneutron',
     'horizon.framework.widgets.toast.service',
     '$modal',
@@ -32,22 +31,21 @@
 
   /**
    * @ngDoc factory
-   * @name horizon.app.core.images.actions.createService
+   * @name horizon.app.core.images.actions.quickService
    * @Description A service to open the user wizard.
    */
-  function createService(
+  function quickService(
     resourceType,
-    router,
     bsnneutron,
     toast,
     $modal,
     actionResultService
   ) {
     var message = {
-      success: gettext('Policy was successfully created.')
+      success: gettext('Quick Test was successfully created.')
     };
 
-    var newRule = {};
+    var model = {};
 
     var service = {
       perform: perform,
@@ -66,36 +64,29 @@
     }
 
     function perform() {
-
       var localSpec = {
         backdrop: 'static',
-        controller: 'CreateController as ctrl',
-        templateUrl: '/static/routerrules/actions/create/createModal.html'
+        controller: 'QuickTestController as ctrl',
+        templateUrl: '/static/reachabilitytests/actions/quicktest/quickModal.html'
       };
 
-      return $modal.open(localSpec).result.then(function create(result) {
-        if(result.nexthops != "") {
-          result.nexthops = result.nexthops.split(",");
-        }
-        else {
-          result.nexthops = [];
-        }
+      return $modal.open(localSpec).result.then(function (result) {
         return submit(result);
       });
     }
 
     function submit(result) {
-      newRule = result;
-      router.router.router_rules.push(result);
-      return bsnneutron.router_update(router.router).then(onCreateTemplate);
+      return bsnneutron.reachabilityquicktest_create(result).then(onCreateTest);
     }
 
-    function onCreateTemplate() {
-      toast.add('success', interpolate(message.success, [newRule.priority]));
+    function onCreateTest(response) {
+      // need to run and give option to save
+      var newTest = response.data;
+      toast.add('success', interpolate(message.success, [newTest.name]));
       return actionResultService.getActionResult()
-        .created(resourceType, newRule.priority)
+        .created(resourceType, newTest.id)
         .result;
     }
 
-  } // end of createService
+  } // end of quickService
 })(); // end of IIFE

@@ -72,36 +72,36 @@
         priority: 1,
         sortDefault: true,
       })
-      .append({
-        id: 'src_tenant_name',
-        priority: 1,
-        sortDefault: true,
-      })
-      .append({
-        id: 'src_segment_name',
-        priority: 1,
-        sortDefault: true,
-      })
-      .append({
-        id: 'src_ip',
-        priority: 1,
-        sortDefault: true,
-      })
-      .append({
-        id: 'dst_ip',
-        priority: 1,
-        sortDefault: true,
-      })
-      .append({
-        id: 'test_time',
-        priority: 1,
-        sortDefault: true,
-      })
-      .append({
-        id: 'test_result',
-        priority: 1,
-        sortDefault: true,
-      });
+      // .append({
+      //   id: 'src_tenant_name',
+      //   priority: 1,
+      //   sortDefault: true,
+      // })
+      // .append({
+      //   id: 'src_segment_name',
+      //   priority: 1,
+      //   sortDefault: true,
+      // })
+      // .append({
+      //   id: 'src_ip',
+      //   priority: 1,
+      //   sortDefault: true,
+      // })
+      // .append({
+      //   id: 'dst_ip',
+      //   priority: 1,
+      //   sortDefault: true,
+      // })
+      // .append({
+      //   id: 'test_time',
+      //   priority: 1,
+      //   sortDefault: true,
+      // })
+      // .append({
+      //   id: 'test_result',
+      //   priority: 1,
+      //   sortDefault: true,
+      // });
 
     function listFunction() {
       return bsnneutron.reachabilitytest_list().then(modifyResponse);

@@ -70,7 +70,7 @@
         templateUrl: '/static/reachabilitytests/actions/create/createModal.html'
       };
 
-      return $modal.open(localSpec).result.then(function create(result) {
+      return $modal.open(localSpec).result.then(function (result) {
         return submit(result);
       });
     }

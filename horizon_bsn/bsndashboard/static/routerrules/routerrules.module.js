@@ -105,7 +105,6 @@
 
       function modifyResponse(response) {
         router.router = response.data;
-        debugger;
         var result = {data: {items: response.data.router_rules.map(addTrackBy)}};
         return result;
 

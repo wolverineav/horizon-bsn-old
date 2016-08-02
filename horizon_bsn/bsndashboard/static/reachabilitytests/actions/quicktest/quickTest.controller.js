@@ -27,22 +27,34 @@
    */
 
   angular
-    .module('bsn.bsndashboard.routerrules')
-    .controller('CreateController', createController);
+    .module('bsn.bsndashboard.reachabilitytests')
+    .controller('QuickTestController', createController);
 
     createController.$inject = [
-      'bsn.bsndashboard.routerrules.router'
+      'horizon.app.core.openstack-service-api.keystone',
+      'horizon.app.core.openstack-service-api.neutron'
     ]
 
 
-  function createController(router) {
+  function createController(keystone, neutron) {
     var ctrl = this;
-
-    ctrl.router = router.router;
-
     ctrl.model = {};
-    ctrl.model.nexthops = "";
-    ctrl.model.priority = -1;
+    ctrl.user;
+    ctrl.networks;
+
+    // Get the current tenant
+    keystone.getCurrentUserSession().success(
+      function(user) {
+        ctrl.user = user;
+      }
+    );
+
+    // Get the current tenant's segments
+    neutron.getNetworks().success(
+      function(networks) {
+        ctrl.networks = networks;
+      }
+    );
   }
 
 })();

@@ -31,20 +31,18 @@
   registerRouterRulesActions.$inject = [
     'horizon.framework.conf.resource-type-registry.service',
     'bsn.bsndashboard.routerrules.actions.create.service',
-    // 'bsn.bsndashboard.routerrules.actions.update.service',
-    // 'bsn.bsndashboard.routerrules.actions.delete.service',
+    'bsn.bsndashboard.routerrules.actions.delete.service',
     'bsn.bsndashboard.routerrules.resourceType'
   ];
 
   function registerRouterRulesActions(
     registry,
     createRuleService,
-    // updateRuleService,
-    // deleteRuleService,
+    deleteRuleService,
     routerRulesResourceTypeCode
   ) {
     var routerRuleResourceType = registry.getResourceType(routerRulesResourceTypeCode);
-    // routerRuleResourceType.itemActions
+    routerRuleResourceType.itemActions
     //   .append({
     //     id: 'updateTemplateService',
     //     service: updateTemplateService,
@@ -52,14 +50,14 @@
     //       text: gettext('Edit')
     //     }
     //   })
-    //   .append({
-    //     id: 'deleteTemplateService',
-    //     service: deleteTemplateService,
-    //     template: {
-    //       text: gettext('Delete'),
-    //       type: 'delete'
-    //     }
-    //   });
+      .append({
+        id: 'deleteRuleService',
+        service: deleteRuleService,
+        template: {
+          text: gettext('Delete'),
+          type: 'delete'
+        }
+      });
 
     routerRuleResourceType.globalActions
       .append({
@@ -71,15 +69,15 @@
         }
       });
     
-    // routerRuleResourceType.batchActions
-    //   .append({
-    //     id: 'batchDeleteImageAction',
-    //     service: deleteTemplateService,
-    //     template: {
-    //       type: 'delete-selected',
-    //       text: gettext('Delete Images')
-    //     }
-    //   });
+    routerRuleResourceType.batchActions
+      .append({
+        id: 'batchDeleteRuleService',
+        service: deleteRuleService,
+        template: {
+          type: 'delete-selected',
+          text: gettext('Delete Rules')
+        }
+      });
   }
 
 })();
