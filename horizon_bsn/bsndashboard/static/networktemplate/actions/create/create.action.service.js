@@ -55,6 +55,10 @@
     return service;
 
     //////////////
+    /**
+     * This function always returns a promise that resolves to true. The upstream Horizon framework requires an 
+     * allowed function to exist, but we don't need one for our purposes.
+     */
     function allowed() {
       var promise = new Promise(function (resolve) {
         resolve(true);

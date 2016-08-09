@@ -84,52 +84,44 @@
       // from the deleteModal into a standard form
       var actionResult = actionResultService.getActionResult();
       deleteModalResult.pass.forEach(function markDeleted(item) {
-        debugger;
-        actionResult.deleted(networktemplateassignmentResourceType, getEntity(item).id);
+        actionResult.deleted(networktemplateassignmentResourceType, getEntity(item).stack_id);
       });
       deleteModalResult.fail.forEach(function markFailed(item) {
-        debugger;
-        actionResult.failed(networktemplateassignmentResourceType, getEntity(item).id);
+        actionResult.failed(networktemplateassignmentResourceType, getEntity(item).stack_id);
       });
       return actionResult.result;
     }
 
     function deleteTemplate() {
-      
       // delete heat stack
-      
-      
-      // then delete 
-      return keystone.getCurrentUserSession().then(
-        function(user) {
-          debugger;
-          return bsnneutron.networktemplateassignment_delete(user.data.project_id);
-        }
-      );
+      return bsnneutron.networktemplateassignment_list().then(function(nettemplate_response) {
+        // use stack_id in response to delete the stack
+        return bsnneutron.heatstack_delete(nettemplate_response.data.items[0].stack_id);
+      });
     }
 
     function labelize(count) {
       return {
 
         title: ngettext(
-          'Confirm Delete Template',
-          'Confirm Delete Templates', count),
+          'Confirm Remove Template',
+          'Confirm Remove Templates', count),
 
         message: ngettext(
-          'You have selected "%s". A deleted template is not recoverable.',
-          'You have selected "%s". Deleted templates are not recoverable.', count),
+          'You have selected "%s". A removed template is not recoverable.',
+          'You have selected "%s". Removed templates are not recoverable.', count),
 
         submit: ngettext(
-          'Delete Template',
-          'Delete Templates', count),
+          'Remove Template',
+          'Remove Templates', count),
 
         success: ngettext(
-          'Deleted Template: %s.',
-          'Deleted Templates: %s.', count),
+          'Remove in progress: %s.',
+          'Remove in progress: %s.', count),
 
         error: ngettext(
-          'Unable to delete template: %s.',
-          'Unable to delete templates: %s.', count)
+          'Unable to remove template: %s.',
+          'Unable to remove templates: %s.', count)
       };
     }
 

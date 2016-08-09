@@ -18,17 +18,17 @@
   'use strict';
 
   /**
-   * @ngdoc reachabilityTestController
+   * @ngdoc UpdateNetTemplateController
    * @ngController
    *
    * @description
-   * Controller for reachability tests.
+   * Controller for network templates.
    * Serve as the focal point for table actions.
    */
 
   angular
     .module('bsn.bsndashboard.networktemplate')
-    .controller('updateController', updateController);
+    .controller('UpdateNetTemplateController', updateController);
 
     updateController.$inject = [
       '$scope'

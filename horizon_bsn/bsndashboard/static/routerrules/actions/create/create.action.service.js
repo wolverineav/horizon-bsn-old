@@ -85,12 +85,14 @@
     }
 
     function submit(result) {
+      debugger;
       newRule = result;
       router.router.router_rules.push(result);
       return bsnneutron.router_update(router.router).then(onCreateTemplate);
     }
 
     function onCreateTemplate() {
+      debugger;
       toast.add('success', interpolate(message.success, [newRule.priority]));
       return actionResultService.getActionResult()
         .created(resourceType, newRule.priority)

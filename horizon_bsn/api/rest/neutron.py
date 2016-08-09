@@ -20,12 +20,19 @@ from django.views import generic
 from openstack_dashboard.api.rest import urls
 from openstack_dashboard.api.rest import utils as rest_utils
 
+from horizon import messages
+
 from horizon_bsn.api import neutron as bsnneutron
 from openstack_dashboard.api import neutron
 from openstack_dashboard.api import heat
 
 from horizon_bsn.content.connections.tabs import get_stack_topology
 from django.utils.safestring import mark_safe
+from django.utils.translation import ugettext_lazy as _
+
+import logging
+
+LOG = logging.getLogger(__name__)
 
 ##################################################################
 # REACHABILITY TESTS
@@ -93,11 +100,37 @@ class ReachabilityQuickTest(generic.View):
 @urls.register
 class HeatStack(generic.View):
     """API for Router_get"""
+    url_regex = r'heat/stack/(?P<stack_id>[^/]+|default)/$'
+
+    @rest_utils.ajax()
+    def delete(self, request, stack_id):
+        result = heat.stack_delete(request, stack_id)
+        return result
+
+    @rest_utils.ajax()
+    def get(self, request, stack_id):
+        result = heat.stack_get(request, stack_id)
+        return result.stack_status
+
+@urls.register
+class HeatStacks(generic.View):
+    """API for Router_get"""
     url_regex = r'heat/stack/$'
 
     @rest_utils.ajax()
-    def delete(self, request):
-        result = neutron.router_list(request)[0]
+    def post(self, request):
+        result = heat.stack_create(request, **request.DATA)
+        return result
+
+
+@urls.register
+class HeatTemplateValidate(generic.View):
+    """API for BSN Neutron Network Template Assignment"""
+    url_regex = r'heat/templatevalidate/$'
+
+    @rest_utils.ajax()
+    def post(self, request):
+        result = heat.template_validate(request, template=request.DATA['body'])
         return result
 
 @urls.register
@@ -114,6 +147,16 @@ class NetworkTemplateAssignment(generic.View):
 class NetworkTemplateAssignments(generic.View):
     """API for BSN Neutron Network Template Assignment"""
     url_regex = r'neutron/networktemplateassignment/$'
+
+    @rest_utils.ajax()
+    def post(self, request):
+        result = bsnneutron.networktemplateassignment_create(request, **request.DATA)
+        return result
+
+    @rest_utils.ajax()
+    def patch(self, request):
+        result = bsnneutron.networktemplateassignment_update(request, request.user.project_id, **{'stack_id': request.DATA['stack_id']})
+        return result
 
     @rest_utils.ajax()
     def get(self, request):

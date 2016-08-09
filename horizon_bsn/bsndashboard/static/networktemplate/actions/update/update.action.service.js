@@ -68,7 +68,7 @@
       var localSpec = {
         scope: $rootScope,
         backdrop: 'static',
-        controller: 'updateController as ctrl',
+        controller: 'UpdateNetTemplateController as ctrl',
         templateUrl: '/static/networktemplate/actions/update/updateModal.html'
       };
 

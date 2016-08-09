@@ -22,7 +22,7 @@
    *
    * @description
    * Provides all of the services and widgets required
-   * to support and display network template related content.
+   * to support and display network template assignmen related content.
    */
   angular
     .module('bsn.bsndashboard.networktemplateassignment', [
@@ -92,7 +92,8 @@
       return bsnneutron.networktemplateassignment_list().success(modifyResponse);
 
       function modifyResponse(response) {
-        return {data: {items: response.items.map(addTrackBy)}};
+        var retval =  {data: {items: response.items.map(addTrackBy)}};
+        return retval;
 
         function addTrackBy(template) {
           template.trackBy = template.name;

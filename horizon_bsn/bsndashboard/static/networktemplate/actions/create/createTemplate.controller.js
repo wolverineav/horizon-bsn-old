@@ -18,27 +18,19 @@
   'use strict';
 
   /**
-   * @ngdoc reachabilityTestController
+   * @ngdoc CreateNetTemplateController
    * @ngController
    *
    * @description
-   * Controller for reachability tests.
-   * Serve as the focal point for table actions.
+   * Controller for creating network templates.
    */
 
   angular
     .module('bsn.bsndashboard.networktemplate.actions')
     .controller('CreateNetTemplateController', createController);
 
-    createController.$inject = [
-    ]
-
-
   function createController() {
     var ctrl = this;
     ctrl.model = {};
-    
-
   }
-
 })();

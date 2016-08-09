@@ -22,7 +22,7 @@
    *
    * @descriptiont
    * Provides all of the services and widgets required
-   * to support and display network template related content.
+   * to support and display router policy related content.
    */
   angular
     .module('bsn.bsndashboard.routerrules', [
@@ -91,14 +91,14 @@
         sortDefault: true,
       })
 
-    // TODO:
+    
     /**
-     * Modify this method and routerrules_list so that fewer router_get calls are made
-     * Call router_get once here, and keep the router as a constant
-     * When we call routerrules_list, pass the router as an argument, so that the server side does not get router again
-     * When we call routerrules_create/delete/whatever, same thing, pass the router
+     * This list function is a bit different from the others. Because router rules are not a standalone construct in
+     * neutron, we don't have simple API calls to create, read, update, or delete router rules. Instead, we have to 
+     * manually modify the router (part of upstream neutron), and do a router patch each time we want to modify a 
+     * policy. In order to avoid making unnecessary API calls to router_get, we store the router from router_get on
+     * the client side, and do the router updating manually. Then, it's a simple call to router_update each time.
      */
-
     function listFunction() {
       var result = bsnneutron.router_get().then(modifyResponse);
       return result;

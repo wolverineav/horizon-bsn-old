@@ -40,6 +40,10 @@
     'bsn.bsndashboard.reachabilitytests.resourceType'
   ];
 
+  /**
+   * Getting the table to update the test_time and test_result after running is difficult. Instead, these are put in
+   * the drawer as a workaround.
+   */
   function run(registry, bsnneutron, basePath, reachabilitytestsResourceType) {
     registry.getResourceType(reachabilitytestsResourceType)
       .setNames(gettext('Reachability Tests'), gettext('Reachability Tests'))
@@ -72,36 +76,6 @@
         priority: 1,
         sortDefault: true,
       })
-      // .append({
-      //   id: 'src_tenant_name',
-      //   priority: 1,
-      //   sortDefault: true,
-      // })
-      // .append({
-      //   id: 'src_segment_name',
-      //   priority: 1,
-      //   sortDefault: true,
-      // })
-      // .append({
-      //   id: 'src_ip',
-      //   priority: 1,
-      //   sortDefault: true,
-      // })
-      // .append({
-      //   id: 'dst_ip',
-      //   priority: 1,
-      //   sortDefault: true,
-      // })
-      // .append({
-      //   id: 'test_time',
-      //   priority: 1,
-      //   sortDefault: true,
-      // })
-      // .append({
-      //   id: 'test_result',
-      //   priority: 1,
-      //   sortDefault: true,
-      // });
 
     function listFunction() {
       return bsnneutron.reachabilitytest_list().then(modifyResponse);

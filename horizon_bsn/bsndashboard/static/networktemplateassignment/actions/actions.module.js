@@ -30,52 +30,38 @@
 
   registerNetworkTemplateActions.$inject = [
     'horizon.framework.conf.resource-type-registry.service',
+    'bsn.bsndashboard.networktemplateassignemnt.actions.apply.service',
     'bsn.bsndashboard.networktemplateassignment.actions.remove.service',
     'bsn.bsndashboard.networktemplateassignment.resourceType'
   ];
 
   function registerNetworkTemplateActions(
     registry,
-    removeTemplateInstanceService,
+    applyTemplateService,
+    removeTemplateService,
     networkTemplateResourceTypeCode
   ) {
     var networkTemplateResourceType = registry.getResourceType(networkTemplateResourceTypeCode);
     networkTemplateResourceType.itemActions
-    //   .append({
-    //     id: 'updateTemplateService',
-    //     service: updateTemplateService,
-    //     template: {
-    //       text: gettext('Edit')
-    //     }
-    //   })
     .append({
-        id: 'removeTemplateInstanceService',
-        service: removeTemplateInstanceService,
+        id: 'removeTemplateService',
+        service: removeTemplateService,
         template: {
           text: gettext('Delete Network Template'),
           type: 'delete'
         }
       });
 
-    // networkTemplateResourceType.globalActions
-    //   .append({
-    //     id: 'removeTemplateInstanceService',
-    //     service: removeTemplateInstanceService,
-    //     template: {
-    //       text: gettext('Remove Network Template Instance'),
-    //       type: 'delete'
-    //     }
-    //   });
+    networkTemplateResourceType.globalActions
+      .append({
+        id: 'applyTemplateService',
+        service: applyTemplateService,
+        template: {
+          text: gettext('Apply Network Template Instance'),
+          type: 'create'
+        }
+      });
 
-    // networkTemplateResourceType.batchActions
-    //   .append({
-    //     id: 'batchDeleteImageAction',
-    //     service: deleteTemplateService,
-    //     template: {
-    //       type: 'delete-selected',
-    //       text: gettext('Delete Images')
-    //     }
-    //   });
   }
 
 })();

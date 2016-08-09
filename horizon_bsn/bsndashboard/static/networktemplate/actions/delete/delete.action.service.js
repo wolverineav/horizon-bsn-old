@@ -22,9 +22,7 @@
   deleteTemplateService.$inject = [
     'horizon.app.core.openstack-service-api.bsnneutron',
     'horizon.framework.util.actions.action-result.service',
-    'horizon.framework.util.i18n.gettext',
     'horizon.framework.widgets.modal.deleteModalService',
-    'horizon.framework.widgets.toast.service',
     'bsn.bsndashboard.networktemplate.resourceType',
     '$rootScope'
   ];
@@ -43,9 +41,7 @@
   function deleteTemplateService(
     bsnneutron,
     actionResultService,
-    gettext,
     deleteModal,
-    toast,
     networktemplateResourceType,
     $scope
   ) {

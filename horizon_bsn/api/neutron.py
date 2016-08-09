@@ -223,8 +223,7 @@ def networktemplateassignment_update(request,
     :param request: request context
     :param networktemplate_id: id of the network template
     :param tenant_id: (optional) tenant id of the network template updated
-    :param name: name of the network template
-    :param body: body of the network template
+    :param stack_id: id of the heat stack
     """
     LOG.debug("networktemplateassignment_update(): id=%s params=%s",
               networktemplateassignment_id,

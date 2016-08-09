@@ -68,7 +68,7 @@ def get_stack_topology(request):
     stacks = [s for s in hc.stacks.list(tenant_id=request.user.tenant_id)
               if s.id == assign.stack_id]
     if not stacks:
-        # leftover association, delete the assignment
+        # # leftover association, delete the assignment
         neutron.networktemplateassignment_delete(request,
                                                  request.user.tenant_id)
         return {"network_entities": "",

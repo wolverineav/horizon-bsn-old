@@ -84,6 +84,9 @@
    * @param {Object} $routeProvider
    * @description Routes used by this module.
    * @returns {undefined} Returns nothing
+   * 
+   * Note: the URL given to $routeProvider must be /bsndashboard/ for the panel that is default. If this panel is
+   * changed to not be the default, the route must be updated for both this panel, and the new default panel.
    */
   function config($provide, $windowProvider, $routeProvider) {
     var path = $windowProvider.$get().STATIC_URL + 'networktemplate/';

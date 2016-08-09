@@ -45,8 +45,6 @@
       success: gettext('Test was successfully created.')
     };
 
-    var model = {};
-
     var service = {
       perform: perform,
       allowed: allowed

@@ -37,7 +37,6 @@
     var service = {
       reachabilitytest_create: reachabilitytest_create,
       reachabilitytest_list: reachabilitytest_list,
-      // reachabilitytest_get: reachabilitytest_get,
       reachabilitytest_run: reachabilitytest_run,
       reachabilitytest_delete: reachabilitytest_delete,
 
@@ -47,10 +46,13 @@
       networktemplate_update: networktemplate_update,
       networktemplate_delete: networktemplate_delete,
 
-      // networktemplateassignment_create: networktemplateassignment_create,
+      heatstack_delete: heatstack_delete,
+      heatstack_create: heatstack_create,
+      check_status: check_status,
+      template_validate: template_validate,
+      networktemplateassignment_create: networktemplateassignment_create,
       networktemplateassignment_list: networktemplateassignment_list,
-      // networktemplateassignment_get: networktemplateassignment_get,
-      // networktemplateassignment_update: networktemplateassignment_update,
+      networktemplateassignment_update: networktemplateassignment_update,
       networktemplateassignment_delete: networktemplateassignment_delete,
       //
       reachabilityquicktest_create: reachabilityquicktest_create,
@@ -253,12 +255,41 @@
      * //////////////////////////////////////////
      */
 
-    /**
-     * @name reachabilitytest_list
-     * @description Get the list of reachability tests.
-     *
-     * @returns {Object} An object with property "items." Each item is a test.
-     */
+    function heatstack_delete(id) {
+      return apiService.delete('api/heat/stack/' + id + '/')
+        .error(function() {
+          toastService.add('error', gettext('Error deleting heat stack'));
+        });
+    }
+
+    function heatstack_create(stack) {
+      return apiService.post('api/heat/stack/', stack)
+        .error(function() {
+          toastService.add('error', gettext('Error creating heat stack'));
+        });
+    }
+
+    function check_status(id){
+      return apiService.get('api/heat/stack/' + id + '/')
+        .error(function() {
+          toastService.add('error', gettext('Error checking heat stack status'));
+        });
+    }
+
+    function template_validate(template) {
+      return apiService.post('api/heat/templatevalidate/', template)
+        .error(function() {
+          toastService.add('error', gettext('Error validating template'));
+        });
+    }
+
+    function networktemplateassignment_create(assignment) {
+      return apiService.post('api/neutron/networktemplateassignment/', assignment)
+        .error(function() {
+          toastService.add('error', gettext('Error applying network template assignment'));
+        });
+    }
+
     function networktemplateassignment_list() {
       return apiService.get('api/neutron/networktemplateassignment/')
         .error(function() {
@@ -266,25 +297,20 @@
         });
     }
 
-    /**
-     * @name reachabilitytest_list
-     * @description Get the list of reachability tests.
-     *
-     * @returns {Object} An object with property "items." Each item is a test.
-     */
+    function networktemplateassignment_update(assignment) {
+      return apiService.patch('api/neutron/networktemplateassignment/', assignment)
+        .error(function() {
+          toastService.add('error', gettext('Error patching network template assignment'));
+        });
+    }
+
     function networktemplateassignment_delete(id) {
       return apiService.delete('api/neutron/networktemplateassignment/' + id + '/').then(
         function success(response) {
-          debugger;
           return response;
         },
         function error() {
-          debugger;
           toastService.add('error', gettext('Error deleting network template assignment'));
-        },
-        function notify() {
-          debugger;
-          console.log("Here's a notification");
         }
       );
     }

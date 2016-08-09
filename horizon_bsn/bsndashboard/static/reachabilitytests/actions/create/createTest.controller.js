@@ -39,8 +39,8 @@
   function createController(keystone, neutron) {
     var ctrl = this;
     ctrl.model = {};
-    ctrl.user;
-    ctrl.networks;
+    ctrl.user = {};
+    ctrl.networks = [];
 
     // Get the current tenant
     keystone.getCurrentUserSession().success(

@@ -43,13 +43,6 @@
   ) {
     var routerRuleResourceType = registry.getResourceType(routerRulesResourceTypeCode);
     routerRuleResourceType.itemActions
-    //   .append({
-    //     id: 'updateTemplateService',
-    //     service: updateTemplateService,
-    //     template: {
-    //       text: gettext('Edit')
-    //     }
-    //   })
       .append({
         id: 'deleteRuleService',
         service: deleteRuleService,
@@ -79,5 +72,4 @@
         }
       });
   }
-
 })();
