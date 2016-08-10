@@ -27,6 +27,7 @@
     'horizon.framework.widgets.toast.service',
     '$modal',
     'horizon.framework.util.actions.action-result.service',
+    '$rootScope'
   ];
 
   /**
@@ -39,7 +40,8 @@
     bsnneutron,
     toast,
     $modal,
-    actionResultService
+    actionResultService,
+    $rootScope
   ) {
     var message = {
       success: gettext('Quick Test was successfully created.')
@@ -63,6 +65,8 @@
       return promise;
     }
 
+    var quickTest = {};
+
     function perform() {
       var localSpec = {
         backdrop: 'static',
@@ -70,17 +74,66 @@
         templateUrl: '/static/reachabilitytests/actions/quicktest/quickModal.html'
       };
 
-      return $modal.open(localSpec).result.then(function (result) {
-        return submit(result);
-      });
+      return $modal.open(localSpec).result.then(get_test)
+        .then(create_test)
+        .then(run_test)
+        .then(result_modal)
+        .then(save_modal)
+        .then(save_test)
+        .then(onSaveTest);
     }
 
-    function submit(result) {
-      return bsnneutron.reachabilityquicktest_create(result).then(onCreateTest);
+    function get_test(result) {
+      quickTest = result;
+      return bsnneutron.reachabilityquicktest_get();
+    }
+    
+    function create_test(result) {
+      if (result.data) {
+        return bsnneutron.reachabilityquicktest_update(quickTest);
+      }
+      else {
+        debugger;
+        return bsnneutron.reachabilityquicktest_create(quickTest);
+      }
     }
 
-    function onCreateTest(response) {
+    function run_test() {
+      return bsnneutron.reachabilityquicktest_update({run_test: true});
+    }
+
+    function result_modal (result) {
+      $rootScope.testResult = result;
+
+      var localSpec = {
+        scope: $rootScope,
+        backdrop: 'static',
+        controller: 'QuickTestResultController as ctrl',
+        templateUrl: '/static/reachabilitytests/actions/quicktest/quickResultModal.html'
+      };
+
+      return $modal.open(localSpec).result;
+    }
+
+    function save_modal () {
+      var localSpec = {
+        backdrop: 'static',
+        controller: 'SaveController as ctrl',
+        templateUrl: '/static/reachabilitytests/actions/quicktest/saveModal.html'
+      };
+
+      return $modal.open(localSpec).result;
+    }
+
+    function save_test (result) {
+      debugger;
+      quickTest.name = result;
+      return bsnneutron.reachabilitytest_create(quickTest);
+    }
+
+    function onSaveTest(response) {
       // need to run and give option to save
+      debugger;
       var newTest = response.data;
       toast.add('success', interpolate(message.success, [newTest.name]));
       return actionResultService.getActionResult()

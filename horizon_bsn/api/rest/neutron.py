@@ -71,27 +71,24 @@ class ReachabilityTests(generic.View):
 @urls.register
 class ReachabilityQuickTest(generic.View):
     """API for BSN Neutron Reachability Tests"""
-    url_regex = r'neutron/reachabilityquicktest/(?P<reachabilityquicktest_id>[^/]+|default)/$'
-
-    @rest_utils.ajax()
-    def get(self, request, reachabilityquicktest_id):
-        result = bsnneutron.reachabilityquicktest_get(request, reachabilityquicktest_id)
-        return {'items': [n.to_dict() for n in result]}
-
-    @rest_utils.ajax()
-    def patch(self, request, reachabilitytest_id):
-        result = bsnneutron.reachabilityquicktest_update(request, reachabilitytest_id, **request.DATA)
-        return result
-
-@urls.register
-class ReachabilityQuickTest(generic.View):
-    """API for BSN Neutron Reachability Tests"""
     url_regex = r'neutron/reachabilityquicktest/$'
 
     @rest_utils.ajax()
     def post(self, request):
         result = bsnneutron.reachabilityquicktest_create(request, **request.DATA)
         return result
+
+    @rest_utils.ajax()
+    def get(self, request):
+        result = bsnneutron.reachabilityquicktest_get(request, request.user.project_id)
+        return result
+
+    @rest_utils.ajax()
+    def patch(self, request):
+        result = bsnneutron.reachabilityquicktest_update(request, request.user.project_id, **request.DATA)
+        return result
+
+
 
 ##################################################################
 # NETWORK TEMPLATE ASSIGNMENT

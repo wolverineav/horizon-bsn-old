@@ -28,33 +28,17 @@
 
   angular
     .module('bsn.bsndashboard.reachabilitytests')
-    .controller('QuickTestController', quickTestController);
+    .controller('QuickTestResultController', quickTestResultController);
 
-    quickTestController.$inject = [
-      'horizon.app.core.openstack-service-api.keystone',
-      'horizon.app.core.openstack-service-api.neutron'
+    quickTestResultController.$inject = [
+      '$scope'
     ]
 
 
-  function quickTestController(keystone, neutron) {
+  function quickTestResultController($scope) {
     var ctrl = this;
-    ctrl.model = {};
-    ctrl.user = {};
-    ctrl.networks = [];
 
-    // Get the current tenant
-    keystone.getCurrentUserSession().success(
-      function(user) {
-        ctrl.user = user;
-      }
-    );
-
-    // Get the current tenant's segments
-    neutron.getNetworks().success(
-      function(networks) {
-        ctrl.networks = networks;
-      }
-    );
+    ctrl.quickResult = $scope.testResult.data;
   }
 
 })();

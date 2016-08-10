@@ -54,7 +54,7 @@
       networktemplateassignment_list: networktemplateassignment_list,
       networktemplateassignment_update: networktemplateassignment_update,
       networktemplateassignment_delete: networktemplateassignment_delete,
-      //
+      
       reachabilityquicktest_create: reachabilityquicktest_create,
       // reachabilityquicktest_list: reachabilityquicktest_list,
       reachabilityquicktest_get: reachabilityquicktest_get,
@@ -143,10 +143,10 @@
      *
      * @returns {Object} The result of the get call.
      */
-    function reachabilityquicktest_get(tenant_id) {
-      return apiService.get('api/neutron/reachabilitytests/' + tenant_id + '/')
+    function reachabilityquicktest_get() {
+      return apiService.get('api/neutron/reachabilityquicktest/')
         .error(function () {
-          toastService.add('error', gettext('Error getting reachability test'));
+          toastService.add('error', gettext('Error getting reachability quick test'));
         });
     }
 
@@ -158,7 +158,7 @@
      * @returns {Object} The result of the creation call.
      */
     function reachabilityquicktest_create(test) {
-      return apiService.post('api/neutron/reachabilitytests/', test)
+      return apiService.post('api/neutron/reachabilityquicktest/', test)
         .error(function () {
           toastService.add('error', gettext('Error creating reachability test'));
         });
@@ -171,8 +171,8 @@
      *
      * @returns {Object} The result of the patch call.
      */
-    function reachabilityquicktest_update(tenant_id, test) {
-      return apiService.patch('api/neutron/reachabilitytests/' + tenant_id + '/', test)
+    function reachabilityquicktest_update(test) {
+      return apiService.patch('api/neutron/reachabilityquicktest/', test)
         .error(function () {
           toastService.add('error', gettext('Error patching reachability test'));
         });
