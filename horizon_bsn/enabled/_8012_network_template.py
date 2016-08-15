@@ -20,7 +20,9 @@ PANEL_DASHBOARD = 'bsndashboard'
 DISABLED = False
 
 # Python panel class of the PANEL to be added.
-ADD_PANEL = 'horizon_bsn.bsndashboard.networktemplateassignment.panel.Networktemplateassignment'
+ADD_PANEL = \
+    'horizon_bsn.bsndashboard.' \
+    'networktemplateassignment.panel.Networktemplateassignment'
 
 PANEL_GROUP = 'bsnextensions'
 

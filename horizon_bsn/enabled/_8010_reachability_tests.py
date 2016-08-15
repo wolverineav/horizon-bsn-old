@@ -20,10 +20,10 @@ PANEL_DASHBOARD = 'bsndashboard'
 DISABLED = False
 
 # Python panel class of the PANEL to be added.
-ADD_PANEL = 'horizon_bsn.bsndashboard.reachabilitytests.panel.Reachabilitytests'
+ADD_PANEL = \
+    'horizon_bsn.bsndashboard.reachabilitytests.panel.Reachabilitytests'
 
 PANEL_GROUP = 'bsnextensions'
 
 # Automatically discover static resources in installed apps
 AUTO_DISCOVER_STATIC_FILES = True
-
