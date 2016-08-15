@@ -15,6 +15,7 @@
 """API over the neutron service.
 """
 
+from django.utils.safestring import mark_safe
 from django.views import generic
 
 from openstack_dashboard.api.rest import urls
@@ -26,7 +27,6 @@ from openstack_dashboard.api import heat
 from openstack_dashboard.api import neutron
 
 from horizon_bsn.content.connections.tabs import get_stack_topology
-from django.utils.safestring import mark_safe
 
 import logging
 
@@ -41,18 +41,17 @@ LOG = logging.getLogger(__name__)
 class ReachabilityTest(generic.View):
     """API for BSN Neutron Reachability Tests"""
     url_regex = \
-        r'neutron/reachabilitytests/(?P<reachabilitytest_id>[^/]+|default)/$'
+        r'neutron/reachabilitytests/(?P<test_id>[^/]+|default)/$'
 
     @rest_utils.ajax()
-    def patch(self, request, reachabilitytest_id):
-        result = bsnneutron.reachabilitytest_update\
-            (request, reachabilitytest_id, run_test=True)
+    def patch(self, request, test_id):
+        result = bsnneutron.\
+            reachabilitytest_update(request, test_id, run_test=True)
         return result
 
     @rest_utils.ajax()
-    def delete(self, request, reachabilitytest_id):
-        result = bsnneutron.reachabilitytest_delete\
-            (request, reachabilitytest_id)
+    def delete(self, request, test_id):
+        result = bsnneutron.reachabilitytest_delete(request, test_id)
         return result
 
 
@@ -79,17 +78,22 @@ class ReachabilityQuickTest(generic.View):
 
     @rest_utils.ajax()
     def post(self, request):
-        result = bsnneutron.reachabilityquicktest_create(request, **request.DATA)
+        result = bsnneutron.\
+            reachabilityquicktest_create(request, **request.DATA)
         return result
 
     @rest_utils.ajax()
     def get(self, request):
-        result = bsnneutron.reachabilityquicktest_get(request, request.user.project_id)
+        result = bsnneutron.\
+            reachabilityquicktest_get(request, request.user.project_id)
         return result
 
     @rest_utils.ajax()
     def patch(self, request):
-        result = bsnneutron.reachabilityquicktest_update(request, request.user.project_id, **request.DATA)
+        result = bsnneutron.\
+            reachabilityquicktest_update(request,
+                                         request.user.project_id,
+                                         **request.DATA)
         return result
 
 ##################################################################
@@ -138,11 +142,13 @@ class HeatTemplateValidate(generic.View):
 @urls.register
 class NetworkTemplateAssignment(generic.View):
     """API for BSN Neutron Network Template Assignment"""
-    url_regex = r'neutron/networktemplateassignment/(?P<networktemplateassignment_id>[^/]+|default)/$'
+    url_regex = \
+        r'neutron/networktemplateassignment/(?P<assignment_id>[^/]+|default)/$'
 
     @rest_utils.ajax()
-    def delete(self, request, networktemplateassignment_id):
-        result = bsnneutron.networktemplateassignment_delete(request, networktemplateassignment_id)
+    def delete(self, request, assignment_id):
+        result = bsnneutron.\
+            networktemplateassignment_delete(request, assignment_id)
         return result
 
 
@@ -153,12 +159,17 @@ class NetworkTemplateAssignments(generic.View):
 
     @rest_utils.ajax()
     def post(self, request):
-        result = bsnneutron.networktemplateassignment_create(request, **request.DATA)
+        result = bsnneutron.\
+            networktemplateassignment_create(request, **request.DATA)
         return result
 
     @rest_utils.ajax()
     def patch(self, request):
-        result = bsnneutron.networktemplateassignment_update(request, request.user.project_id, **{'stack_id': request.DATA['stack_id']})
+        result = bsnneutron.\
+            networktemplateassignment_update(
+                request,
+                request.user.project_id,
+                **{'stack_id': request.DATA['stack_id']})
         return result
 
     @rest_utils.ajax()
@@ -193,21 +204,23 @@ class NetworkTemplateAssignments(generic.View):
 @urls.register
 class NetworkTemplate(generic.View):
     """API for BSN Neutron Network Template"""
-    url_regex = r'neutron/networktemplate/(?P<networktemplate_id>[^/]+|default)/$'
+    url_regex = \
+        r'neutron/networktemplate/(?P<template_id>[^/]+|default)/$'
 
     @rest_utils.ajax()
-    def get(self, request, networktemplate_id):
-        result = bsnneutron.networktemplate_get(request, networktemplate_id)
+    def get(self, request, template_id):
+        result = bsnneutron.networktemplate_get(request, template_id)
         return result
 
     @rest_utils.ajax()
-    def patch(self, request, networktemplate_id):
-        result = bsnneutron.networktemplate_update(request, networktemplate_id, **request.DATA)
+    def patch(self, request, template_id):
+        result = bsnneutron.\
+            networktemplate_update(request, template_id, **request.DATA)
         return result
 
     @rest_utils.ajax()
-    def delete(self, request, networktemplate_id):
-        result = bsnneutron.networktemplate_delete(request, networktemplate_id)
+    def delete(self, request, template_id):
+        result = bsnneutron.networktemplate_delete(request, template_id)
         return result
 
 
