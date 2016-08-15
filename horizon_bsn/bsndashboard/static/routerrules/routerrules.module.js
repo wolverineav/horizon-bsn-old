@@ -90,7 +90,6 @@
         priority: 1,
         sortDefault: true,
       })
-
     
     /**
      * This list function is a bit different from the others. Because router rules are not a standalone construct in

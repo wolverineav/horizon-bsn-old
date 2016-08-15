@@ -64,62 +64,97 @@
     }
     
     var stack_create_response = {};
+    var template = {};
+    var parameters = {};
 
     function perform() {
+
+      return bsnneutron.networktemplateassignment_list()
+        .then(function (result) {
+          if (result.data.items) {
+            // there is already a template applied, cannot apply another
+            var localSpec = {
+              backdrop: 'static',
+              templateUrl: '/static/networktemplateassignment/actions/apply/denyModal.html'
+            }
+            $modal.open(localSpec).result;
+            return;
+          }
+          else {
+            // there is not template yet, we can apply one
+            return apply();
+          }
+        })
+    }
+
+    /**
+     * To apply a network template, we open the selection modal (modal.open). Once the user has selected a network
+     * template to apply, we get the fields required for the network template (validateTemplte). Once the input fields
+     * are returned, we can open the second modal to fill in the arguments (applyTemplate). Then, we can create the
+     * assignment (createNetTemplateAssign), create the heat stack (createHeatStack), and update the assignment
+     * (updateNetTemplateAssign). When this is done, we return with onApplyTemplate. The controller is then responsible
+     * for querying Heat for the status of the heat stack creation, and then update the table.
+     */
+
+    function apply() {
       var localSpec = {
         backdrop: 'static',
         controller: 'SelectNetTemplateController as ctrl',
         templateUrl: '/static/networktemplateassignment/actions/apply/selectModal.html'
       };
 
-      var template = {};
-      var parameters = {};
-
       return $modal.open(localSpec).result
-        .then(function (selectResult) {
-          var result = JSON.parse(selectResult.template);
-          template = result;
-          return result;
-        })
-        .then(bsnneutron.template_validate)
-        .then(function(validateResult) {
-          $rootScope.properties = validateResult.data;
-          localSpec = {
-            backdrop: 'static',
-            controller: 'SelectNetTemplateController as ctrl',
-            templateUrl: '/static/networktemplateassignment/actions/apply/applyModal.html',
-            scope: $rootScope
-          };
-          return $modal.open(localSpec).result
-        })
-        .then(function(params) {
-
-          parameters = params;
-
-          var assignment = {
-            template_id: template.id,
-            stack_id: 'PENDING'
-          };
-          return bsnneutron.networktemplateassignment_create(assignment);
-        })
-        .then(function() {
-          // create the heat stack, and return an action result
-          var args = {
-            stack_name: template.name,
-            parameters: parameters,
-            template: template.body
-          }
-          return bsnneutron.heatstack_create(args);
-        })
-        .then(function(response) {
-          stack_create_response = response;
-          return bsnneutron.networktemplateassignment_update({'stack_id': response.data.stack.id});
-        })
+        .then(validateTemplate)
+        .then(applyTemplate)
+        .then(createNetTemplateAssign)
+        .then(createHeatStack)
+        .then(updateNetTemplateAssign)
         .then(onApplyTemplate);
     }
 
+    function validateTemplate(selectResult) {
+      var result = JSON.parse(selectResult.template);
+      template = result;
+      return bsnneutron.template_validate(result);
+    }
+
+    function applyTemplate(validateResult) {
+      $rootScope.properties = validateResult.data;
+      var localSpec = {
+        backdrop: 'static',
+        controller: 'SelectNetTemplateController as ctrl',
+        templateUrl: '/static/networktemplateassignment/actions/apply/applyModal.html',
+        scope: $rootScope
+      };
+      return $modal.open(localSpec).result
+    }
+
+    function createNetTemplateAssign(params){
+      parameters = params;
+
+      var assignment = {
+        template_id: template.id,
+        stack_id: 'PENDING'
+      };
+      return bsnneutron.networktemplateassignment_create(assignment);
+    }
+
+    function createHeatStack() {
+      var args = {
+        stack_name: template.name,
+        parameters: parameters,
+        template: template.body
+      };
+
+      return bsnneutron.heatstack_create(args);
+    }
+
+    function updateNetTemplateAssign(response) {
+      stack_create_response = response;
+      return bsnneutron.networktemplateassignment_update({'stack_id': response.data.stack.id});
+    }
+
     function onApplyTemplate() {
-      debugger;
       var newStack = stack_create_response.data;
       toast.add('success', interpolate(message.success, [newStack.stack.id]));
       return actionResultService.getActionResult()

@@ -28,9 +28,10 @@
     'horizon.framework.util.actions.action-result.service',
     'horizon.framework.conf.resource-type-registry.service',
     'horizon.app.core.openstack-service-api.bsnneutron',
+    '$interval'
   ];
 
-  function controller($q, $scope, events, searchService, actionResultService, registry, bsnneutron) {
+  function controller($q, $scope, events, searchService, actionResultService, registry, bsnneutron, $interval) {
     var ctrl = this;
 
     // 'Public' Controller members
@@ -81,6 +82,7 @@
     }
   
     var interval;
+    var stack_id;
     
     function actionSuccessHandler(result) { // eslint-disable-line no-unused-vars
 
@@ -106,18 +108,24 @@
 
         // Handle deleted items
         if (deletedIds.length) {
+          stack_id = deletedIds[0];
           ctrl.itemsSrc = difference(ctrl.itemsSrc, deletedIds,'id');
-          interval = setInterval(check_state, 2000, deletedIds[0]);
+          interval = $interval(check_state, 2000, 0, true);
         }
 
         // Handle updated and created items
         if (updatedIds.length || createdIds.length) {
-          debugger;
           // Ideally, get each created item individually, but
           // this is simple and robust for the common use case.
           // TODO: If we want more detailed updates, we could do so here.
           // ctrl.resourceType.list().then(onLoad);
-          interval = setInterval(check_state, 2000, createdIds[0]);
+          if (createdIds) {
+            stack_id = createdIds[0];
+          }
+          else {
+            stack_id = updatedIds[0];
+          }
+          interval = $interval(check_state, 2000, 0, true);
         }
 
         // Handle failed items
@@ -133,33 +141,23 @@
       }
     }
 
-    function check_state(id) {
-      // check_status
-      bsnneutron.check_status(id).then(function(result) {
+    function check_state() {
+      bsnneutron.check_status(stack_id).then(function(result) {
         if (result.data == "CREATE_COMPLETE") {
           ctrl.resourceType.list().then(onLoad);
-          clearInterval(interval);
-          // bsnneutron.networktemplateassignment_update({'stack_id': id}).then(function() {
-          //
-          // });
+          $interval.cancel(interval);
         }
         else if (result.data == "DELETE_COMPLETE") {
           ctrl.resourceType.list().then(onLoad);
-          clearInterval(interval);
+          $interval.cancel(interval);
         }
         else if (result.data == "DELETE_IN_PROGRESS" || result.data == "CREATE_IN_PROGRESS") {
           ctrl.resourceType.list().then(onLoad);
         }
-        else if (result.data != "CREATE_IN_PROGRESS"){
-          clearInterval(interval);
+        else {
+          $interval.cancel(interval);
         }
       });
-
-      // if in progress, do nothing
-
-      // if complete, delete nettemplate assignment
-
-      // if fail, clear interval
     }
 
     function difference(currentList, otherList, key) {

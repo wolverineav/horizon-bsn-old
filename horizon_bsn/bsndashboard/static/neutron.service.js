@@ -56,10 +56,8 @@
       networktemplateassignment_delete: networktemplateassignment_delete,
       
       reachabilityquicktest_create: reachabilityquicktest_create,
-      // reachabilityquicktest_list: reachabilityquicktest_list,
       reachabilityquicktest_get: reachabilityquicktest_get,
       reachabilityquicktest_update: reachabilityquicktest_update,
-      // reachabilityquicktest_delete: reachabilityquicktest_delete
 
       router_get: router_get,
       router_update: router_update
@@ -193,7 +191,7 @@
     function networktemplate_create(template) {
       return apiService.post('api/neutron/networktemplate/', template)
         .error(function() {
-          toastService.add('error', gettext('Error creating networktemplate'));
+          toastService.add('error', gettext('Error creating network template'));
         });
     }
 
@@ -219,7 +217,7 @@
     function networktemplate_get(id) {
       return apiService.get('api/neutron/networktemplate/' + id + '/')
         .error(function() {
-          toastService.add('error', gettext('Error getting networktemplate'));
+          toastService.add('error', gettext('Error getting network template'));
         });
     }
 
@@ -232,7 +230,7 @@
     function networktemplate_update(id, template) {
       return apiService.patch('api/neutron/networktemplate/' + id + '/', template)
         .error(function() {
-          toastService.add('error', gettext('Error updating networktemplate'));
+          toastService.add('error', gettext('Error updating network template'));
         });
     }
 
@@ -245,7 +243,7 @@
     function networktemplate_delete(id) {
       return apiService.delete('api/neutron/networktemplate/' + id + '/')
         .error(function() {
-          toastService.add('error', gettext('Error deleting networktemplate'));
+          toastService.add('error', gettext('Error deleting network template'));
         });
     }
 

@@ -74,6 +74,14 @@
         templateUrl: '/static/reachabilitytests/actions/quicktest/quickModal.html'
       };
 
+      /**
+       * To execute a quick test, we open the modal to get the parameters (open modal), and then check if a test
+       * already exists (get_test). Whether or not it does affects the behavior of create_test. Then, we run the test
+       * (run_test). The result of running is passed to the second modal (result_modal), which displays the outcome.
+       * Then, the user can continue onto the third modal to save the quicktest as a permanent reachability test
+       * (save_test). If this process is completed, the final method is called (onSaveTest).
+       */
+
       return $modal.open(localSpec).result.then(get_test)
         .then(create_test)
         .then(run_test)
@@ -82,6 +90,7 @@
         .then(save_test)
         .then(onSaveTest);
     }
+
 
     function get_test(result) {
       quickTest = result;
@@ -93,7 +102,6 @@
         return bsnneutron.reachabilityquicktest_update(quickTest);
       }
       else {
-        debugger;
         return bsnneutron.reachabilityquicktest_create(quickTest);
       }
     }
@@ -126,14 +134,11 @@
     }
 
     function save_test (result) {
-      debugger;
       quickTest.name = result;
       return bsnneutron.reachabilitytest_create(quickTest);
     }
 
     function onSaveTest(response) {
-      // need to run and give option to save
-      debugger;
       var newTest = response.data;
       toast.add('success', interpolate(message.success, [newTest.name]));
       return actionResultService.getActionResult()

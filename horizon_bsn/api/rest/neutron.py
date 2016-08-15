@@ -88,8 +88,6 @@ class ReachabilityQuickTest(generic.View):
         result = bsnneutron.reachabilityquicktest_update(request, request.user.project_id, **request.DATA)
         return result
 
-
-
 ##################################################################
 # NETWORK TEMPLATE ASSIGNMENT
 ##################################################################
@@ -237,4 +235,3 @@ class Router(generic.View):
         body = {'router_rules': request.DATA['router_rules']}
         result = neutron.router_update(request, request.DATA['id'], **body)
         return result
-

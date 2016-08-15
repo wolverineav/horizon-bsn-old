@@ -30,20 +30,10 @@
     .controller('bsn.bsndashboard.networktemplate.DrawerController', controller);
 
   controller.$inject = [
-    'horizon.app.core.openstack-service-api.bsnneutron'
   ];
 
-  function controller(bsnneutron) {
+  function controller() {
     var ctrl = this;
-
-    // TODO: set ctrl.body to the body of the correct nettemplate
-    ctrl.data = bsnneutron.networktemplate_list().success(returnResponse);
-    ctrl.body = "TODO: set ctrl.body to the body of the correct nettemplate";
-    
-    function returnResponse(response) {
-      return response;
-    }
-
   }
 
 })();
