@@ -100,8 +100,7 @@ class AddRouterRule(forms.SelfHandlingForm):
                     'source': data['source'],
                     'destination': data['destination'],
                     'nexthops': data['nexthops'].split(',')}
-            rulem
-            anager.add_rule(request, router_id=data['router_id'],
+            rulemanager.add_rule(request, router_id=data['router_id'],
                                  newrule=rule)
             msg = _('Router policy action performed successfully.')
             LOG.debug(msg)

@@ -1,1 +1,1 @@
-import horizon_bsn.bsndashboard
+import horizon_bsn.bsndashboard     # noqa

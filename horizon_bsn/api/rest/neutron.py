@@ -20,15 +20,13 @@ from django.views import generic
 from openstack_dashboard.api.rest import urls
 from openstack_dashboard.api.rest import utils as rest_utils
 
-from horizon import messages
-
 from horizon_bsn.api import neutron as bsnneutron
-from openstack_dashboard.api import neutron
+
 from openstack_dashboard.api import heat
+from openstack_dashboard.api import neutron
 
 from horizon_bsn.content.connections.tabs import get_stack_topology
 from django.utils.safestring import mark_safe
-from django.utils.translation import ugettext_lazy as _
 
 import logging
 
@@ -38,20 +36,25 @@ LOG = logging.getLogger(__name__)
 # REACHABILITY TESTS
 ##################################################################
 
+
 @urls.register
 class ReachabilityTest(generic.View):
     """API for BSN Neutron Reachability Tests"""
-    url_regex = r'neutron/reachabilitytests/(?P<reachabilitytest_id>[^/]+|default)/$'
+    url_regex = \
+        r'neutron/reachabilitytests/(?P<reachabilitytest_id>[^/]+|default)/$'
 
     @rest_utils.ajax()
     def patch(self, request, reachabilitytest_id):
-        result = bsnneutron.reachabilitytest_update(request, reachabilitytest_id, run_test=True)
+        result = bsnneutron.reachabilitytest_update\
+            (request, reachabilitytest_id, run_test=True)
         return result
 
     @rest_utils.ajax()
     def delete(self, request, reachabilitytest_id):
-        result = bsnneutron.reachabilitytest_delete(request, reachabilitytest_id)
+        result = bsnneutron.reachabilitytest_delete\
+            (request, reachabilitytest_id)
         return result
+
 
 @urls.register
 class ReachabilityTests(generic.View):
@@ -67,6 +70,7 @@ class ReachabilityTests(generic.View):
     def post(self, request):
         result = bsnneutron.reachabilitytest_create(request, **request.DATA)
         return result
+
 
 @urls.register
 class ReachabilityQuickTest(generic.View):
@@ -92,6 +96,7 @@ class ReachabilityQuickTest(generic.View):
 # NETWORK TEMPLATE ASSIGNMENT
 ##################################################################
 
+
 @urls.register
 class HeatStack(generic.View):
     """API for Router_get"""
@@ -106,6 +111,7 @@ class HeatStack(generic.View):
     def get(self, request, stack_id):
         result = heat.stack_get(request, stack_id)
         return result.stack_status
+
 
 @urls.register
 class HeatStacks(generic.View):
@@ -128,6 +134,7 @@ class HeatTemplateValidate(generic.View):
         result = heat.template_validate(request, template=request.DATA['body'])
         return result
 
+
 @urls.register
 class NetworkTemplateAssignment(generic.View):
     """API for BSN Neutron Network Template Assignment"""
@@ -137,6 +144,7 @@ class NetworkTemplateAssignment(generic.View):
     def delete(self, request, networktemplateassignment_id):
         result = bsnneutron.networktemplateassignment_delete(request, networktemplateassignment_id)
         return result
+
 
 @urls.register
 class NetworkTemplateAssignments(generic.View):
@@ -181,6 +189,7 @@ class NetworkTemplateAssignments(generic.View):
 # NETWORK TEMPLATE
 ##################################################################
 
+
 @urls.register
 class NetworkTemplate(generic.View):
     """API for BSN Neutron Network Template"""
@@ -201,6 +210,7 @@ class NetworkTemplate(generic.View):
         result = bsnneutron.networktemplate_delete(request, networktemplate_id)
         return result
 
+
 @urls.register
 class NetworkTemplates(generic.View):
     """API for BSN Neutron Network Template"""
@@ -219,6 +229,7 @@ class NetworkTemplates(generic.View):
 ##################################################################
 # ROUTER RULES
 ##################################################################
+
 
 @urls.register
 class Router(generic.View):

@@ -16,10 +16,12 @@ import horizon
 
 import horizon_bsn.api.rest.neutron  # noqa
 
+
 class Bsndashboard(horizon.Dashboard):
     name = _("BSN Dashboard")
     slug = "bsndashboard"
-    default_panel = 'networktemplate'  # Specify the slug of the dashboard's default panel.
+    # Specify the slug of the dashboard's default panel.
+    default_panel = 'networktemplate'
 
 
 horizon.register(Bsndashboard)
