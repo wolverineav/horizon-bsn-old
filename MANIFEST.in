@@ -1,10 +1,5 @@
 include AUTHORS
 include ChangeLog
-
-recursive-include horizon_bsn/bsndashboard/templates *
-recursive-include horizon_bsn/bsndashboard/static *
-recursive-include horizon_bsn/bsndashboard/reachabilitytests/templates *
-
 exclude .gitignore
 exclude .gitreview
 
