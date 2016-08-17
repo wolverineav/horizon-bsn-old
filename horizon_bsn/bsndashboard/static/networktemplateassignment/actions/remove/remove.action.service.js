@@ -30,13 +30,13 @@
     '$rootScope'
   ];
 
-  /*
+  /**
    * @ngdoc factory
    * @name bsn.bsndashboard.networktemplateassignment.actions.delete.service
 
    *
    * @Description
-   * Brings up the delete templates confirmation modal dialog.
+   * Brings up the delete template assignment confirmation modal dialog.
 
    * On submit, delete given templates.
    * On cancel, do nothing.

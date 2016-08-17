@@ -12,7 +12,6 @@
 """API over the neutron service.
 """
 
-from django.utils.safestring import mark_safe
 from django.views import generic
 
 from openstack_dashboard.api.rest import urls
@@ -28,6 +27,18 @@ from horizon_bsn.content.connections.tabs import get_stack_topology
 import logging
 
 LOG = logging.getLogger(__name__)
+
+"""
+Three of the list API calls (reachabilitytest, networktemplate,
+networktemplateassignment) return dictionaries rather than objects.
+This is because the list_function on the Javascript side that is
+part of the upstream Horizon framework doesn't play nice w/ just
+returning objects. However, the other API methods return values to
+newly written functions, not from upstream. The only list call
+different is router_rules, because router_rules rely on updating
+the router, and there are no separate constructs for router_rules
+on the neutron side
+"""
 
 ##################################################################
 # REACHABILITY TESTS
@@ -184,10 +195,10 @@ class NetworkTemplateAssignments(generic.View):
                 'status': topology['stack'].status,
                 'stack_status': topology['stack'].stack_status,
                 'stack_status_reason': topology['stack'].stack_status_reason,
-                'resources': mark_safe('<br>'.join([
+                'resources': '\r\n'.join([
                     ('%s (%s)' % (r.resource_name,
-                                  r.resource_type)).replace(' ', '&nbsp;')
-                    for r in topology['stack_resources']]))
+                                  r.resource_type))
+                    for r in topology['stack_resources']])
             }
             return {'items': [tabledata]}
         except Exception:

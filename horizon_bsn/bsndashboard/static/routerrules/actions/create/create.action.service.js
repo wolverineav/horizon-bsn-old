@@ -30,8 +30,8 @@
 
   /**
    * @ngDoc factory
-   * @name horizon.app.core.images.actions.createService
-   * @Description A service to open the user wizard.
+   * @name bsn.bsndashboard.routerrules.actions.create.service
+   * @Description A service to open the create router rule modal.
    */
   function createService(
     resourceType,

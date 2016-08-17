@@ -58,8 +58,8 @@
       return bsnneutron.networktemplate_list().success(modifyResponse);
 
       function modifyResponse(response) {
-        var returnvalue = {data: {items: response.items.map(addTrackBy)}};
-        return returnvalue;
+        var retval = {data: {items: response.items.map(addTrackBy)}};
+        return retval;
 
         function addTrackBy(template) {
           template.trackBy = template.name;

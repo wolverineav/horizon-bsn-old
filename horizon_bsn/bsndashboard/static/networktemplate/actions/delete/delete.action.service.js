@@ -24,10 +24,11 @@
     'horizon.framework.util.actions.action-result.service',
     'horizon.framework.widgets.modal.deleteModalService',
     'bsn.bsndashboard.networktemplate.resourceType',
-    '$rootScope'
+    '$rootScope',
+    'horizon.app.core.openstack-service-api.keystone'
   ];
 
-  /*
+  /**
    * @ngdoc factory
    * @name bsn.bsndashboard.networktemplate.actions.delete.service
 
@@ -43,7 +44,8 @@
     actionResultService,
     deleteModal,
     networktemplateResourceType,
-    $scope
+    $scope,
+    keystone
   ) {
     var service = {
       allowed: allowed,
@@ -67,11 +69,21 @@
     }
 
     function allowed() {
-      var promise = new Promise(function (resolve) {
-        resolve(true);
-      });
-
-      return promise;
+      return keystone.getCurrentUserSession()
+        .then(function (result) {
+          if (result.data.is_superuser) {
+            var promise = new Promise(function (resolve) {
+              resolve(true);
+            });
+            return promise;
+          }
+          else {
+            var promise = new Promise(function (resolve, reject) {
+              reject(false);
+            });
+            return promise;
+          }
+        });
     }
 
     function createResult(deleteModalResult) {

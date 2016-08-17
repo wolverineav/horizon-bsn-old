@@ -25,13 +25,14 @@
     'horizon.framework.widgets.toast.service',
     '$modal',
     'horizon.framework.util.actions.action-result.service',
-    '$rootScope'
+    '$rootScope',
+    'horizon.app.core.openstack-service-api.keystone'
   ];
 
   /**
    * @ngDoc factory
-   * @name horizon.app.core.images.actions.updateTemplateService
-   * @Description A service to open the user wizard.
+   * @name bsn.bsndashboard.networktemplate.actions.update.service
+   * @Description A service to open the update template modal.
    */
   function updateTemplateService(
     resourceType,
@@ -39,7 +40,8 @@
     toast,
     $modal,
     actionResultService,
-    $rootScope
+    $rootScope,
+    keystone
   ) {
     var message = {
       success: gettext('Template was successfully updated.')
@@ -54,11 +56,21 @@
 
     //////////////
     function allowed() {
-      var promise = new Promise(function (resolve) {
-        resolve(true);
-      });
-
-      return promise;
+      return keystone.getCurrentUserSession()
+        .then(function (result) {
+          if (result.data.is_superuser) {
+            var promise = new Promise(function (resolve) {
+              resolve(true);
+            });
+            return promise;
+          }
+          else {
+            var promise = new Promise(function (resolve, reject) {
+              reject(false);
+            });
+            return promise;
+          }
+        });
     }
 
     function perform(template) {

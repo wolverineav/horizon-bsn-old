@@ -27,7 +27,7 @@
     '$rootScope'
   ];
 
-  /*
+  /**
    * @ngdoc factory
    * @name bsn.bsndashboard.reachabilitytests.actions.delete.service
 

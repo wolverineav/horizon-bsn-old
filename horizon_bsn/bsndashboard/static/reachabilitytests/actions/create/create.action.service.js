@@ -29,8 +29,8 @@
 
   /**
    * @ngDoc factory
-   * @name horizon.app.core.images.actions.createService
-   * @Description A service to open the user wizard.
+   * @name bsn.bsndashboard.reachabilitytests.actions.create.service
+   * @Description A service to open reachability test create modal.
    */
   function createService(
     resourceType,

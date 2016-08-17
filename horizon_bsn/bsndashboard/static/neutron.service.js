@@ -101,10 +101,10 @@
     }
 
     /**
-     * @name reachabilitytest_list
-     * @description Get the list of reachability tests.
+     * @name reachabilitytest_run
+     * @description Run a reachability test.
      *
-     * @returns {Object} An object with property "items." Each item is a test.
+     * @returns {Object} The result of running the reachability test.
      */
     function reachabilitytest_run(id) {
       return apiService.patch('api/neutron/reachabilitytests/' + id + '/')
@@ -135,7 +135,7 @@
     /**
      * @name reachabilityquicktest_get
      * @param {Object} test - The test
-     * @description Get a reachability quick test.
+     * @description Get the reachability quick test.
      *
      * @returns {Object} The result of the get call.
      */
@@ -164,6 +164,7 @@
      * @name reachabilityquicktest_patch
      * @param {Object} test - The test
      * @description Patch a reachability quick test.
+     * Call with run_test=True to run the test.
      *
      * @returns {Object} The result of the patch call.
      */
@@ -181,10 +182,10 @@
      */
 
     /**
-     * @name reachabilitytest_list
-     * @description Get the list of reachability tests.
+     * @name networktemplate_create
+     * @description Create a network template.
      *
-     * @returns {Object} An object with property "items." Each item is a test.
+     * @returns The result of the creation call.
      */
     function networktemplate_create(template) {
       return apiService.post('api/neutron/networktemplate/', template)
@@ -194,10 +195,10 @@
     }
 
     /**
-     * @name reachabilitytest_list
-     * @description Get the list of reachability tests.
+     * @name networktemplate_list
+     * @description Get the list of network templates.
      *
-     * @returns {Object} An object with property "items." Each item is a test.
+     * @returns {Object} An object with property "items." Each item is a template.
      */
     function networktemplate_list() {
       return apiService.get('api/neutron/networktemplate/')
@@ -207,10 +208,10 @@
     }
 
     /**
-     * @name reachabilitytest_list
-     * @description Get the list of reachability tests.
+     * @name networktemplate_get
+     * @description Get a ceratin network template.
      *
-     * @returns {Object} An object with property "items." Each item is a test.
+     * @returns The network template.
      */
     function networktemplate_get(id) {
       return apiService.get('api/neutron/networktemplate/' + id + '/')
@@ -220,10 +221,10 @@
     }
 
     /**
-     * @name reachabilitytest_list
-     * @description Get the list of reachability tests.
+     * @name networktemplate_update
+     * @description Update a network template
      *
-     * @returns {Object} An object with property "items." Each item is a test.
+     * @returns The result of the patch call.
      */
     function networktemplate_update(id, template) {
       return apiService.patch('api/neutron/networktemplate/' + id + '/', template)
@@ -233,10 +234,10 @@
     }
 
     /**
-     * @name reachabilitytest_list
-     * @description Get the list of reachability tests.
+     * @name networktemplate_delete
+     * @description Delete a network template.
      *
-     * @returns {Object} An object with property "items." Each item is a test.
+     * @returns The result of the deletion call.
      */
     function networktemplate_delete(id) {
       return apiService.delete('api/neutron/networktemplate/' + id + '/')
@@ -251,6 +252,12 @@
      * //////////////////////////////////////////
      */
 
+    /**
+     * @name heatstack_delete
+     * @description Delete the heat stack.
+     *
+     * @returns The result of the deletion call.
+     */
     function heatstack_delete(id) {
       return apiService.delete('api/heat/stack/' + id + '/')
         .error(function() {
@@ -258,6 +265,12 @@
         });
     }
 
+    /**
+     * @name heatstack_create
+     * @description Create a heat stack.
+     *
+     * @returns The result of the creation call.
+     */
     function heatstack_create(stack) {
       return apiService.post('api/heat/stack/', stack)
         .error(function() {
@@ -265,6 +278,12 @@
         });
     }
 
+    /**
+     * @name check_status
+     * @description Check on the status of a heat stack.
+     *
+     * @returns The heat stack, which has field status.
+     */
     function check_status(id){
       return apiService.get('api/heat/stack/' + id + '/')
         .error(function() {
@@ -272,6 +291,13 @@
         });
     }
 
+    /**
+     * @name template_validate
+     * @description Get a list of fields needed for applying the network template
+     * parsed from the body.
+     *
+     * @returns The result of the validate call.
+     */
     function template_validate(template) {
       return apiService.post('api/heat/templatevalidate/', template)
         .error(function() {
@@ -279,6 +305,12 @@
         });
     }
 
+    /**
+     * @name networktemplateassignment_create
+     * @description Create a network template assignment.
+     *
+     * @returns The result of the creation call.
+     */
     function networktemplateassignment_create(assignment) {
       return apiService.post('api/neutron/networktemplateassignment/', assignment)
         .error(function() {
@@ -286,6 +318,14 @@
         });
     }
 
+    /**
+     * @name networktemplateassignment_list
+     * @description Get a list of network template assignments.
+     * There should only be one, and the list should contain that one
+     * assignment.
+     *
+     * @returns The result of the list call.
+     */
     function networktemplateassignment_list() {
       return apiService.get('api/neutron/networktemplateassignment/')
         .error(function() {
@@ -293,6 +333,14 @@
         });
     }
 
+    /**
+     * @name networktemplateassignment_update
+     * @description Update a network template assignment.
+     * For use after a heat stack creation has begun, and a
+     * stack id is available.
+     *
+     * @returns The result of the update call.
+     */
     function networktemplateassignment_update(assignment) {
       return apiService.patch('api/neutron/networktemplateassignment/', assignment)
         .error(function() {
@@ -300,6 +348,12 @@
         });
     }
 
+    /**
+     * @name networktemplateassignment_delete
+     * @description Delete a network template assignment.
+     *
+     * @returns The result of the deletion call.
+     */
     function networktemplateassignment_delete(id) {
       return apiService.delete('api/neutron/networktemplateassignment/' + id + '/').then(
         function success(response) {
@@ -317,6 +371,12 @@
      * //////////////////////////////////////////
      */
 
+    /**
+     * @name router_get
+     * @description Get the router associated w/ current tenant.
+     *
+     * @returns The result of the get call.
+     */
     function router_get() {
       return apiService.get('api/neutron/router/')
         .error(function() {
@@ -324,6 +384,12 @@
         });
     }
 
+    /**
+     * @name router_update
+     * @description Update a router. We use this 
+     *
+     * @returns The result of the deletion call.
+     */
     function router_update(router) {
       return apiService.patch('api/neutron/router/', router)
         .error(function() {

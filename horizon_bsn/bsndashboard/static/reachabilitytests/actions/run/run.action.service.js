@@ -26,15 +26,15 @@
     'horizon.framework.widgets.toast.service'
   ];
 
-  /*
+  /**
    * @ngdoc factory
-   * @name bsn.bsndashboard.reachabilitytests.actions.delete.service
+   * @name bsn.bsndashboard.reachabilitytests.actions.run.service
 
    *
    * @Description
-   * Brings up the delete tests confirmation modal dialog.
+   * Brings up the run tests confirmation modal dialog.
 
-   * On submit, delete given tests.
+   * On submit, run given tests.
    * On cancel, do nothing.
    */
   function runTestService(

@@ -37,10 +37,10 @@
     registry,
     createRuleService,
     deleteRuleService,
-    routerRulesResourceTypeCode
+    routerRuleResourceType
   ) {
-    var routerRuleResourceType = registry.getResourceType(routerRulesResourceTypeCode);
-    routerRuleResourceType.itemActions
+    var routerRuleResource = registry.getResourceType(routerRuleResourceType);
+    routerRuleResource.itemActions
       .append({
         id: 'deleteRuleService',
         service: deleteRuleService,
@@ -50,7 +50,7 @@
         }
       });
 
-    routerRuleResourceType.globalActions
+    routerRuleResource.globalActions
       .append({
         id: 'createRuleService',
         service: createRuleService,
@@ -60,7 +60,7 @@
         }
       });
     
-    routerRuleResourceType.batchActions
+    routerRuleResource.batchActions
       .append({
         id: 'batchDeleteRuleService',
         service: deleteRuleService,

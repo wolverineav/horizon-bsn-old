@@ -37,10 +37,10 @@
     registry,
     applyTemplateService,
     removeTemplateService,
-    networkTemplateResourceTypeCode
+    networkTemplateResourceType
   ) {
-    var networkTemplateResourceType = registry.getResourceType(networkTemplateResourceTypeCode);
-    networkTemplateResourceType.itemActions
+    var networkTemplateResource = registry.getResourceType(networkTemplateResourceType);
+    networkTemplateResource.itemActions
     .append({
         id: 'removeTemplateService',
         service: removeTemplateService,
@@ -50,7 +50,7 @@
         }
       });
 
-    networkTemplateResourceType.globalActions
+    networkTemplateResource.globalActions
       .append({
         id: 'applyTemplateService',
         service: applyTemplateService,

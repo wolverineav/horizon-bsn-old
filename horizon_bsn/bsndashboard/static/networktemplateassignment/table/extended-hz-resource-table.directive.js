@@ -22,7 +22,10 @@
 
   /**
    * @ngdoc directive
-   * @name hzResourceTable
+   * @name extendedHzResourceTable
+   * Note: This directive is the same as the hz-resource-table from upstream
+   * Horizon, but has some extra functionalities for the requirements of the
+   * network template assignment panel.
    * @description
    * This directive produces a table and accompanying components that describe
    * a list of resources of the given type.  Based on information in the

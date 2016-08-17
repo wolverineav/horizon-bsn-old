@@ -20,8 +20,7 @@
    * @name bsn.bsndashboard.networktemplate.DrawerController
    * @description
    * This is the controller for the templates drawer (summary) view.
-   * Its primary purpose is to provide the metadata definitions to
-   * the template via the ctrl.metadataDefs member.
+   * Its primary purpose is to provide the body of the network template.
    */
   angular
     .module('bsn.bsndashboard.networktemplate')

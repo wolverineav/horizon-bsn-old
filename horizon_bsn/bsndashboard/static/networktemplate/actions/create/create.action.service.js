@@ -25,25 +25,25 @@
     'horizon.framework.widgets.toast.service',
     '$modal',
     'horizon.framework.util.actions.action-result.service',
+    'horizon.app.core.openstack-service-api.keystone',
   ];
 
   /**
    * @ngDoc factory
-   * @name horizon.app.core.images.actions.createService
-   * @Description A service to open the user wizard.
+   * @name bsn.bsndashboard.networktemplate.actions.create.service
+   * @Description A service to open the network template creation modal.
    */
   function createService(
     resourceType,
     bsnneutron,
     toast,
     $modal,
-    actionResultService
+    actionResultService,
+    keystone
   ) {
     var message = {
       success: gettext('Template was successfully created.')
     };
-
-    var model = {};
 
     var service = {
       perform: perform,
@@ -58,11 +58,21 @@
      * allowed function to exist, but we don't need one for our purposes.
      */
     function allowed() {
-      var promise = new Promise(function (resolve) {
-        resolve(true);
-      });
-
-      return promise;
+      return keystone.getCurrentUserSession()
+        .then(function (result) {
+          if (result.data.is_superuser) {
+            var promise = new Promise(function (resolve) {
+              resolve(true);
+            });
+            return promise;
+          }
+          else {
+            var promise = new Promise(function (resolve, reject) {
+              reject(false);
+            });
+            return promise;
+          }
+        });
     }
 
     function perform() {

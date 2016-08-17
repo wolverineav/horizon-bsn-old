@@ -41,10 +41,10 @@
     runTestService,
     deleteTestService,
     quickTestService,
-    reachabilityTestsResourceTypeCode
+    reachabilityTestsResourceType
   ) {
-    var reachabilityTestsResourceType = registry.getResourceType(reachabilityTestsResourceTypeCode);
-    reachabilityTestsResourceType.itemActions
+    var reachabilityTestsResource = registry.getResourceType(reachabilityTestsResourceType);
+    reachabilityTestsResource.itemActions
       .append({
         id: 'runTestService',
         service: runTestService,
@@ -61,7 +61,7 @@
         }
       });
 
-    reachabilityTestsResourceType.globalActions
+    reachabilityTestsResource.globalActions
       .append({
         id: 'createTestService',
         service: createTestService,
@@ -79,7 +79,7 @@
         }
       });
 
-    reachabilityTestsResourceType.batchActions
+    reachabilityTestsResource.batchActions
       .append({
         id: 'batchDeleteImageAction',
         service: deleteTestService,

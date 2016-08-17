@@ -30,8 +30,8 @@
 
   /**
    * @ngDoc factory
-   * @name horizon.app.core.images.actions.quickService
-   * @Description A service to open the user wizard.
+   * @name bsn.bsndashboard.reachabilitytests.actions.quick.service
+   * @Description A service to open quick test modal.
    */
   function quickService(
     resourceType,

@@ -28,7 +28,7 @@
     'bsn.bsndashboard.routerrules.router',
   ];
 
-  /*
+  /**
    * @ngdoc factory
    * @name bsn.bsndashboard.routerrules.actions.delete.service
 

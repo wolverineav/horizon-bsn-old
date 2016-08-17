@@ -30,8 +30,8 @@
 
   /**
    * @ngDoc factory
-   * @name horizon.app.core.images.actions.applyService
-   * @Description A service to open the user wizard.
+   * @name bsn.bsndashboard.networktemplateassignemnt.actions.apply.service
+   * @Description A service to open the apply template modal.
    */
   function applyService(
     resourceType,
@@ -92,6 +92,15 @@
      * assignment (createNetTemplateAssign), create the heat stack (createHeatStack), and update the assignment
      * (updateNetTemplateAssign). When this is done, we return with onApplyTemplate. The controller is then responsible
      * for querying Heat for the status of the heat stack creation, and then update the table.
+     */
+
+    /**
+     * TODO: Improvement to apply template modal.
+     * We can use the new workflow framekwork in this commit: https://review.openstack.org/#/c/332745/ to improve
+     * the modal that selects the network template. Currently, we only select the name of the network template,
+     * but it would be helpful for users to be able to see the body associated with the template selected (in similar
+     * fashion to the launch instance modal of the instances panel).
+     *
      */
 
     function apply() {

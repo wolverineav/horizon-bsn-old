@@ -19,7 +19,7 @@
    * @ngname bsn.bsndashboard.networktemplate
    *
    * @description
-   * Provides all of the actions for templates.
+   * Provides all of the actions for network templates.
    */
   angular.module('bsn.bsndashboard.networktemplate.actions', [
     'horizon.framework.conf',
@@ -39,10 +39,10 @@
     createTemplateService,
     updateTemplateService,
     deleteTemplateService,
-    networkTemplateResourceTypeCode
+    networkTemplateResourceType
   ) {
-    var networkTemplateResourceType = registry.getResourceType(networkTemplateResourceTypeCode);
-    networkTemplateResourceType.itemActions
+    var networkTemplateResource = registry.getResourceType(networkTemplateResourceType);
+    networkTemplateResource.itemActions
       .append({
         id: 'updateTemplateService',
         service: updateTemplateService,
@@ -59,7 +59,7 @@
         }
       });
 
-    networkTemplateResourceType.globalActions
+    networkTemplateResource.globalActions
       .append({
         id: 'createTemplateService',
         service: createTemplateService,
@@ -69,7 +69,7 @@
         }
       });
 
-    networkTemplateResourceType.batchActions
+    networkTemplateResource.batchActions
       .append({
         id: 'batchDeleteTemplateAction',
         service: deleteTemplateService,
