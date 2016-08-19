@@ -70,7 +70,9 @@ class ReachabilityTests(generic.View):
 
     @rest_utils.ajax()
     def get(self, request):
-        result = bsnneutron.reachabilitytest_list(request, **{'tenant_id': request.user.project_id})
+        result = bsnneutron.reachabilitytest_list(
+            request,
+            **{'tenant_id': request.user.project_id})
         return {'items': [n.to_dict() for n in result]}
 
     @rest_utils.ajax()
@@ -244,7 +246,9 @@ class NetworkTemplates(generic.View):
 
     @rest_utils.ajax()
     def get(self, request):
-        result = bsnneutron.networktemplate_list(request, **{'tenant_id': request.user.project_id})
+        result = bsnneutron.networktemplate_list(
+            request,
+            **{'tenant_id': request.user.project_id})
         return {'items': [n.to_dict() for n in result]}
 
 ##################################################################
