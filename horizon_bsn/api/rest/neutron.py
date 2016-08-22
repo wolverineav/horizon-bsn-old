@@ -197,7 +197,7 @@ class NetworkTemplateAssignments(generic.View):
                 'status': topology['stack'].status,
                 'stack_status': topology['stack'].stack_status,
                 'stack_status_reason': topology['stack'].stack_status_reason,
-                'resources': '\r\n'.join([
+                'resources': '<br>'.join([
                     ('%s (%s)' % (r.resource_name,
                                   r.resource_type))
                     for r in topology['stack_resources']])

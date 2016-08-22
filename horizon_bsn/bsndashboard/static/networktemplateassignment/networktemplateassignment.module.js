@@ -75,11 +75,6 @@
         sortDefault: true,
       })
       .append({
-        id: 'resources',
-        priority: 1,
-        sortDefault: true,
-      })
-      .append({
         id: 'status',
         priority: 1,
         sortDefault: true,
