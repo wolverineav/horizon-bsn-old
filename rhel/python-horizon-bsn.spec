@@ -72,7 +72,7 @@ done
 %postun
 
 %changelog
-* Fru Sep 2 2016 Aditya Vaja <wolverine.av@gmail.com> - 0.0.22
+* Fri Sep 2 2016 Aditya Vaja <wolverine.av@gmail.com> - 0.0.22
 - move angular enabled files to future_enabled
 * Mon Aug 29 2016 Michael Xiong <mmxiong@ucla.edu> - 0.0.21
 - BVS-6759: move horizon dashboard to use the new AngularJS framework
