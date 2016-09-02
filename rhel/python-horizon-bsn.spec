@@ -5,7 +5,7 @@
 %global lib_dir %{buildroot}%{python2_sitelib}/%{pypi_name}/plugins/bigswitch
 
 Name:           python-%{rpm_name}
-Version:        0.0.21
+Version:        0.0.22
 Release:        1%{?dist}
 Summary:        Big Switch Networks horizon plugin for OpenStack
 License:        ASL 2.0
@@ -72,6 +72,8 @@ done
 %postun
 
 %changelog
+* Fru Sep 2 2016 Aditya Vaja <wolverine.av@gmail.com> - 0.0.22
+- move angular enabled files to future_enabled
 * Mon Aug 29 2016 Michael Xiong <mmxiong@ucla.edu> - 0.0.21
 - BVS-6759: move horizon dashboard to use the new AngularJS framework
 * Thu Jun 23 2016 Aditya Vaja <wolverine.av@gmail.com> - 0.0.20
